@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/login.css";
 
@@ -7,17 +8,24 @@ function Login(){
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
 
+   const navigate = useNavigate();
+
    const handleSubmit = async () => {
     try {
         const response = await axios.post(
             "http://localhost:8080/api/login",
             {
-                employeeId: employeeId,
+                email: employeeId,
                 password: password
             }
         );
-        setMessage("Login successful!");
         console.log(response.data);
+        if (response.data && response.data !== "INVALID") {
+            setMessage("Login successful!");
+            navigate('/dashboard');
+            return;
+        }
+        setMessage("Invalid credentials");
     } catch (error) {
     if (error.response) {
         // Backend responded with error
