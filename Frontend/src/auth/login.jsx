@@ -7,19 +7,30 @@ function Login(){
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
 
-    const handleSubmit = async () => {
-        try {
-            const response = await axios.post('/api/login', {
+   const handleSubmit = async () => {
+    try {
+        const response = await axios.post(
+            "http://localhost:8080/api/login",
+            {
                 employeeId: employeeId,
                 password: password
-            });
-            setMessage("Login successful!");
-            console.log(response.data);
-        } catch (error) {
-            setMessage("Login failed: " + (error.response?.data?.message || error.message));
-            console.error("Error:", error);
-        }
-    };
+            }
+        );
+        setMessage("Login successful!");
+        console.log(response.data);
+    } catch (error) {
+    if (error.response) {
+        // Backend responded with error
+        setMessage("Login failed: " + JSON.stringify(error.response.data));
+    } else {
+        // Network / other error
+        setMessage("Login failed: " + error.message);
+    }
+    console.error(error);
+}
+
+};
+
 
     return(
         <div className="container">
