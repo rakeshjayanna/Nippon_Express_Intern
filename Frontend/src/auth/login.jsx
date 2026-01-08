@@ -39,6 +39,8 @@ function Login(){
                 navigate('/superadmin-dashboard');
             } else if (normalizedRole === 'EMPLOYEE') {
                 navigate('/employee-dashboard');
+            } else if (normalizedRole === 'HR') {
+                navigate('/employee-dashboard');
             } else {
                 setMessage("Unknown role: " + response.data.role);
                 return;

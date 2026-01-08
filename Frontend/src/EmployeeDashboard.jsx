@@ -1,9 +1,11 @@
 import './styles/dashboard.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ApplicationForm from './ApplicationForm';
 
 function EmployeeDashboard() {
     const [userData, setUserData] = useState(null);
+    const [showApplicationForm, setShowApplicationForm] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -13,7 +15,7 @@ function EmployeeDashboard() {
             return;
         }
         const data = JSON.parse(storedData);
-        if (data.role !== 'EMPLOYEE') {
+        if (data.role !== 'EMPLOYEE' && data.role !== 'HR') {
             navigate('/login');
             return;
         }
@@ -29,6 +31,17 @@ function EmployeeDashboard() {
         return <div>Loading...</div>;
     }
 
+    // If HR user is viewing the form, show it
+    if (showApplicationForm && userData.role === 'HR') {
+        return (
+            <ApplicationForm 
+                userEmail={userData.email} 
+                userRole={userData.role}
+                onClose={() => setShowApplicationForm(false)}
+            />
+        );
+    }
+
     return (
         <div className="dashboard-container">
             <nav className="dashboard-nav">
@@ -36,15 +49,17 @@ function EmployeeDashboard() {
                     <h2>Nippon Express</h2>
                 </div>
                 <div className="nav-user">
-                    <span className="user-role-badge employee">Employee</span>
+                    <span className={`user-role-badge ${userData.role === 'HR' ? 'hr' : 'employee'}`}>
+                        {userData.role === 'HR' ? 'HR' : 'Employee'}
+                    </span>
                     <button onClick={handleLogout} className="logout-btn">Logout</button>
                 </div>
             </nav>
 
             <div className="dashboard-content">
                 <div className="welcome-section">
-                    <h1>Welcome, Employee!</h1>
-                    <p className="subtitle">Employee Portal Dashboard</p>
+                    <h1>Welcome, {userData.role === 'HR' ? 'HR' : 'Employee'}!</h1>
+                    <p className="subtitle">{userData.role === 'HR' ? 'HR Management Portal' : 'Employee Portal Dashboard'}</p>
                 </div>
 
                 <div className="info-cards">
@@ -129,6 +144,12 @@ function EmployeeDashboard() {
                 <div className="quick-actions">
                     <h2>⚡ Quick Actions</h2>
                     <div className="actions-grid">
+                        {userData.role === 'HR' && (
+                            <button className="action-btn primary" onClick={() => setShowApplicationForm(true)}>
+                                <span className="action-icon">📝</span>
+                                <span>Application Form</span>
+                            </button>
+                        )}
                         <button className="action-btn">
                             <span className="action-icon">📊</span>
                             <span>View Reports</span>
