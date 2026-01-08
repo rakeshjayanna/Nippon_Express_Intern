@@ -158,6 +158,7 @@ public class ApplicationFormController {
             result.put("designation", latest.getDesignation());
             result.put("branchId", latest.getBranch() != null ? latest.getBranch().getId() : null);
             result.put("departmentId", latest.getDepartment() != null ? latest.getDepartment().getId() : null);
+            result.put("reportingOfficerId", latest.getReportingOfficer() != null ? latest.getReportingOfficer().getId() : null);
 
             return ResponseEntity.ok(result);
         } catch (Exception e) {

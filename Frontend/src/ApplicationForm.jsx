@@ -1,6 +1,130 @@
 import React, { useState, useEffect } from 'react';
 import './styles/applicationForm.css';
 
+const initialFormData = {
+    employeeCode: '',
+    fullName: '',
+    branch: null,
+    department: null,
+    designation: '',
+    scopeOfWork: '',
+    reportingOfficer: null,
+    subBranch: null,
+    employeeType: 'Permanent',
+    requestAction: 'New',
+    contactNo: '',
+    requestedBy: '',
+
+    // Request For checkboxes
+    requestEmailId: false,
+    requestDomainAccount: false,
+    requestBluetoothAccessCard: false,
+    requestSharedFolder: false,
+    requestInternetAccess: false,
+    requestNexas: false,
+    requestNewins: false,
+    requestVpnAccess: false,
+    requestHardDiskPenDrive: false,
+    requestNewGlow: false,
+    requestInternalApplication: false,
+    requestUsbAccess: false,
+    requestAnyOtherAsset: false,
+    requestGsnet: false,
+
+    // Email ID fields
+    emailDomain: '',
+    employeeType2: '',
+    requestedEmailId: '',
+    companyProvidedMobile: false,
+    mobileNumber: '',
+    companyProvidedSim: false,
+    mobileAccessIntune: false,
+    mobileNo: '',
+    imei1: '',
+    imei2: '',
+    imei3: '',
+    emailRemarks: '',
+
+    // Other sections
+    domainRemarks: '',
+    biometricRemarks: '',
+    sharedFolderRemarks: '',
+    requestType: 'Normal Access',
+    internetRemarks: '',
+
+    // NEWINS
+    requestedBranchCode: '',
+    requestedNewinsId: '',
+    operatorCode: '',
+    newinsRequest: 'New',
+
+    // NExAS
+    companyCode: null,
+    costCenter: null,
+    costCenterCode: '',
+    operationRange: '',
+    hoAccountingUser: false,
+    branchAccountingUser: false,
+    itUser: false,
+    reportDisplayOnly: false,
+    paymentProposal: false,
+    nexasPaymentOperation: false,
+    nexasBatchInput: false,
+    nexasSepaIbacsDataDownload: false,
+    voidCheque: false,
+    exchangeRateMaintenance: false,
+    issueChecque: false,
+    offsetAccount: false,
+    paymentApproval: false,
+    openCloseSchedule: false,
+    taxReport: false,
+    addDeleteMasterMaintenance: false,
+
+    // GS-NET
+    requestedGsnetBranch: '',
+    requestedDivisionName: 'BOTH (OCN IMPORT & EXPORT)',
+    requestedPrimaryDivision: 'OCN EXPORT',
+    requestedUserRole: 'USER',
+    gsnetRemarks: '',
+
+    // Payment Operations
+    paymentOperationBranch: false,
+    batchInput: false,
+    sepaIbacsDataDownload: false,
+    paymentRemarks: '',
+
+    // NEx-GLOW
+    newGlowProject: '',
+    newGlowWarehouse: '',
+    newGlowRemarks: '',
+
+    // Internal Application
+    internalApplication: '',
+    internalAppRemarks: '',
+
+    // USB Access
+    usbAccessFor: '',
+    usbDetails: '',
+    usbRemarks: '',
+
+    // VPN Access
+    domainId: '',
+    emailId: '',
+    mplsNonMpls: '',
+    vpnRemarks: '',
+
+    // HardDisk/PenDrive
+    hardDiskRemarks: '',
+
+    // Any Other Asset
+    otherAssetRemarks: '',
+
+    // General
+    generalRemarks: '',
+    remarksReason: '',
+    sendToRo: ''
+};
+
 function ApplicationForm({ userEmail, userRole, onClose }) {
     const [masterData, setMasterData] = useState({
         branches: [],
@@ -10,124 +134,7 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
         costCenters: []
     });
 
-    const [formData, setFormData] = useState({
-        employeeCode: '',
-        fullName: '',
-        branch: null,
-        department: null,
-        designation: '',
-        reportingOfficer: null,
-        employeeType: 'Permanent',
-        contactNo: '',
-        requestedBy: '',
-        
-        // Request For checkboxes
-        requestEmailId: false,
-        requestDomainAccount: false,
-        requestBluetoothAccessCard: false,
-        requestSharedFolder: false,
-        requestInternetAccess: false,
-        requestNexas: false,
-        requestNewins: false,
-        requestVpnAccess: false,
-        requestHardDiskPenDrive: false,
-        requestNewGlow: false,
-        requestInternalApplication: false,
-        requestUsbAccess: false,
-        requestAnyOtherAsset: false,
-        requestGsnet: false,
-        
-        // Email ID fields
-        emailDomain: '',
-        employeeType2: '',
-        requestedEmailId: '',
-        companyProvidedMobile: false,
-        mobileNumber: '',
-        companyProvidedSim: false,
-        mobileAccessIntune: false,
-        mobileNo: '',
-        imei1: '',
-        imei2: '',
-        imei3: '',
-        emailRemarks: '',
-        
-        // Other sections
-        domainRemarks: '',
-        biometricRemarks: '',
-        sharedFolderRemarks: '',
-        requestType: 'Normal Access',
-        internetRemarks: '',
-        
-        // NEWINS
-        requestedBranchCode: '',
-        requestedNewinsId: '',
-        operatorCode: '',
-        newinsRequest: 'New',
-        
-        // NExAS
-        companyCode: null,
-        costCenter: null,
-        costCenterCode: '',
-        operationRange: '',
-        hoAccountingUser: false,
-        branchAccountingUser: false,
-        itUser: false,
-        reportDisplayOnly: false,
-        paymentProposal: false,
-        nexasPaymentOperation: false,
-        nexasBatchInput: false,
-        nexasSepaIbacsDataDownload: false,
-        voidCheque: false,
-        exchangeRateMaintenance: false,
-        issueChecque: false,
-        offsetAccount: false,
-        paymentApproval: false,
-        openCloseSchedule: false,
-        taxReport: false,
-        addDeleteMasterMaintenance: false,
-        
-        // GS-NET
-        requestedGsnetBranch: '',
-        requestedDivisionName: 'BOTH (OCN IMPORT & EXPORT)',
-        requestedPrimaryDivision: 'OCN EXPORT',
-        requestedUserRole: 'USER',
-        gsnetRemarks: '',
-        
-        // Payment Operations
-        paymentOperationBranch: false,
-        batchInput: false,
-        sepaIbacsDataDownload: false,
-        paymentRemarks: '',
-
-        // NEx-GLOW
-        newGlowRemarks: '',
-        
-        // Internal Application
-        internalApplication: '',
-        internalAppRemarks: '',
-        
-        // USB Access
-        usbAccessFor: '',
-        usbDetails: '',
-        usbRemarks: '',
-        
-        // VPN Access
-        domainId: '',
-        emailId: '',
-        mplsNonMpls: '',
-        vpnRemarks: '',
-        
-        // HardDisk/PenDrive
-        hardDiskRemarks: '',
-        
-        // Any Other Asset
-        otherAssetRemarks: '',
-        
-        // General
-        generalRemarks: '',
-        remarksReason: '',
-        sendToRo: ''
-    });
+    const [formData, setFormData] = useState(initialFormData);
 
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
@@ -173,6 +180,17 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
         setIsLoading(true);
         setMessage({ type: '', text: '' });
 
+        const { newGlowProject, newGlowWarehouse, newGlowRemarks, ...rest } = formData;
+        const nexGlowCombined = [
+            newGlowProject ? `Project: ${newGlowProject}` : '',
+            newGlowWarehouse ? `Ware-House: ${newGlowWarehouse}` : '',
+            newGlowRemarks ? `Remarks: ${newGlowRemarks}` : ''
+        ].filter(Boolean).join('\n');
+        const payload = {
+            ...rest,
+            newGlowRemarks: nexGlowCombined
+        };
+
         try {
             const response = await fetch('http://localhost:8080/api/application-form/submit', {
                 method: 'POST',
@@ -180,7 +198,7 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
                     'Content-Type': 'application/json',
                     'X-User-Email': userEmail
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(payload)
             });
 
             const data = await response.json();
@@ -214,7 +232,8 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
                     fullName: data.fullName || prev.fullName,
                     designation: data.designation || prev.designation,
                     branch: data.branchId ? masterData.branches.find(b => b.id === data.branchId) : prev.branch,
-                    department: data.departmentId ? masterData.departments.find(d => d.id === data.departmentId) : prev.department
+                    department: data.departmentId ? masterData.departments.find(d => d.id === data.departmentId) : prev.department,
+                    reportingOfficer: data.reportingOfficerId ? masterData.reportingOfficers.find(o => o.id === data.reportingOfficerId) : prev.reportingOfficer
                 }));
             }
         } catch (err) {
@@ -223,707 +242,753 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
     };
 
     const handleReset = () => {
-        setFormData({
-            employeeCode: '',
-            fullName: '',
-            branch: null,
-            department: null,
-            designation: '',
-            reportingOfficer: null,
-            employeeType: 'Permanent',
-            contactNo: '',
-            requestedBy: '',
-            requestEmailId: false,
-            requestDomainAccount: false,
-            requestBluetoothAccessCard: false,
-            requestSharedFolder: false,
-            requestInternetAccess: false,
-            requestNexas: false,
-            requestVpnAccess: false,
-            requestHardDiskPenDrive: false,
-            requestNewGlow: false,
-            requestInternalApplication: false,
-            requestUsbAccess: false,
-            requestAnyOtherAsset: false,
-        });
+        setFormData(initialFormData);
         setMessage({ type: '', text: '' });
     };
+
+    const PaperCheckbox = ({ name, label }) => (
+        <label className="paper-check">
+            <input type="checkbox" name={name} checked={!!formData[name]} onChange={handleChange} />
+            <span>{label}</span>
+        </label>
+    );
 
     return (
         <div className="application-form-container">
             <div className="form-wrapper">
-            <div className="form-header">
-                <h2>APPLICATION FORM</h2>
-                {userRole === 'HR' && (
-                    <button onClick={onClose} className="close-btn">×</button>
-                )}
-            </div>
-
-            {message.text && (
-                <div className={`message ${message.type}`}>
-                    {message.text}
-                </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="app-form">
-                {/* Employee Information Section */}
-                <div className="form-section">
-                    <h3>Employee Information</h3>
-                    <div className="form-grid">
-                        <div className="form-group">
-                            <label>Employee Code <span className="required">*</span></label>
-                            <input
-                                type="text"
-                                name="employeeCode"
-                                value={formData.employeeCode}
-                                onChange={handleChange}
-                                onBlur={(e) => fetchEmployeeDetails(e.target.value)}
-                                required
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Full Name <span className="required">*</span></label>
-                            <input
-                                type="text"
-                                name="fullName"
-                                value={formData.fullName}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Branch <span className="required">*</span></label>
-                            <select
-                                value={formData.branch?.id || ''}
-                                onChange={(e) => {
-                                    const branch = masterData.branches.find(b => b.id === parseInt(e.target.value));
-                                    handleSelectChange('branch', branch);
-                                }}
-                                required
-                            >
-                                <option value="">Select</option>
-                                {masterData.branches.map(branch => (
-                                    <option key={branch.id} value={branch.id}>
-                                        {branch.branchName}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div className="form-group">
-                            <label>Department <span className="required">*</span></label>
-                            <select
-                                value={formData.department?.id || ''}
-                                onChange={(e) => {
-                                    const dept = masterData.departments.find(d => d.id === parseInt(e.target.value));
-                                    handleSelectChange('department', dept);
-                                }}
-                                required
-                            >
-                                <option value="">Select</option>
-                                {masterData.departments.map(dept => (
-                                    <option key={dept.id} value={dept.id}>
-                                        {dept.departmentName}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div className="form-group">
-                            <label>Designation <span className="required">*</span></label>
-                            <input
-                                type="text"
-                                name="designation"
-                                value={formData.designation}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Reporting Officer <span className="required">*</span></label>
-                            <select
-                                value={formData.reportingOfficer?.id || ''}
-                                onChange={(e) => {
-                                    const officer = masterData.reportingOfficers.find(o => o.id === parseInt(e.target.value));
-                                    handleSelectChange('reportingOfficer', officer);
-                                }}
-                                required
-                            >
-                                <option value="">Select</option>
-                                {masterData.reportingOfficers.map(officer => (
-                                    <option key={officer.id} value={officer.id}>
-                                        {officer.officerName}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div className="form-group">
-                            <label>Employee Type <span className="required">*</span></label>
-                            <select name="employeeType" value={formData.employeeType} onChange={handleChange} required>
-                                <option value="Permanent">Permanent</option>
-                                <option value="Probation">Probation</option>
-                                <option value="New">New</option>
-                                <option value="Change">Change</option>
-                            </select>
-                        </div>
-
-                        <div className="form-group">
-                            <label>Contact No</label>
-                            <input
-                                type="tel"
-                                name="contactNo"
-                                value={formData.contactNo}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Requested By <span className="required">*</span></label>
-                            <input
-                                type="text"
-                                name="requestedBy"
-                                value={formData.requestedBy}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
+                <div className="paper-sheet">
+                    <div className="paper-titlebar">
+                        <div className="paper-title">APPLICATION FORM</div>
+                        {userRole === 'HR' && (
+                            <button onClick={onClose} className="paper-close-btn" type="button">×</button>
+                        )}
                     </div>
-                </div>
 
-                {/* Request For Section */}
-                <div className="form-section">
-                    <h3>Request For</h3>
-                    <div className="checkbox-grid">
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestEmailId" checked={formData.requestEmailId} onChange={handleChange} />
-                            <span className="label-text">Email ID</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestDomainAccount" checked={formData.requestDomainAccount} onChange={handleChange} />
-                            <span className="label-text">Domain Account</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestBluetoothAccessCard" checked={formData.requestBluetoothAccessCard} onChange={handleChange} />
-                            <span className="label-text">Biometric / Access Card</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestSharedFolder" checked={formData.requestSharedFolder} onChange={handleChange} />
-                            <span className="label-text">Shared Folder</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestInternetAccess" checked={formData.requestInternetAccess} onChange={handleChange} />
-                            <span className="label-text">Internet Access / FTP Access</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestNewins" checked={formData.requestNewins} onChange={handleChange} />
-                            <span className="label-text">NEWINS</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestNexas" checked={formData.requestNexas} onChange={handleChange} />
-                            <span className="label-text">NExAS</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestGsnet" checked={formData.requestGsnet} onChange={handleChange} />
-                            <span className="label-text">GS-NET</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestInternalApplication" checked={formData.requestInternalApplication} onChange={handleChange} />
-                            <span className="label-text">Internal Application</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestUsbAccess" checked={formData.requestUsbAccess} onChange={handleChange} />
-                            <span className="label-text">USB Access</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestVpnAccess" checked={formData.requestVpnAccess} onChange={handleChange} />
-                            <span className="label-text">VPN Access</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestHardDiskPenDrive" checked={formData.requestHardDiskPenDrive} onChange={handleChange} />
-                            <span className="label-text">HardDisk / PenDrive</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestNewGlow" checked={formData.requestNewGlow} onChange={handleChange} />
-                            <span className="label-text">NEx-GLOW</span>
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="requestAnyOtherAsset" checked={formData.requestAnyOtherAsset} onChange={handleChange} />
-                            <span className="label-text">Any Other Asset</span>
-                        </label>
-                    </div>
-                </div>
-
-                {/* Email ID Section */}
-                {formData.requestEmailId && (
-                    <div className="form-section">
-                        <h3>Email ID</h3>
-                        <div className="form-grid">
-                            <div className="form-group full-width">
-                                <label>Email Domain <span className="required">*</span></label>
-                                <select name="emailDomain" value={formData.emailDomain} onChange={handleChange}>
-                                    <option value="">Select</option>
-                                    <option value="Domain1">Domain 1</option>
-                                    <option value="Domain2">Domain 2</option>
-                                </select>
-                            </div>
-
-                            <div className="form-group">
-                                <label>Employee Type <span className="required">*</span></label>
-                                <select name="employeeType2" value={formData.employeeType2} onChange={handleChange}>
-                                    <option value="">Select</option>
-                                    <option value="Type1">Type 1</option>
-                                    <option value="Type2">Type 2</option>
-                                </select>
-                            </div>
-
-                            <div className="form-group">
-                                <label>Requested E-Mail Id</label>
-                                <input type="email" name="requestedEmailId" value={formData.requestedEmailId} onChange={handleChange} />
-                            </div>
-
-                            <div className="form-group">
-                                <label className="checkbox-label">
-                                    <input type="checkbox" name="companyProvidedMobile" checked={formData.companyProvidedMobile} onChange={handleChange} />
-                                    Company Provided Mobile
-                                </label>
-                                <input type="text" name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="Mobile Number" />
-                            </div>
-
-                            <div className="form-group">
-                                <label className="checkbox-label">
-                                    <input type="checkbox" name="companyProvidedSim" checked={formData.companyProvidedSim} onChange={handleChange} />
-                                    Company Provided SIM Card
-                                </label>
-                            </div>
-
-                            <div className="form-group">
-                                <label className="checkbox-label">
-                                    <input type="checkbox" name="mobileAccessIntune" checked={formData.mobileAccessIntune} onChange={handleChange} />
-                                    Mobile Access (Intune)
-                                </label>
-                                <input type="text" name="mobileNo" value={formData.mobileNo} onChange={handleChange} placeholder="Mobile No." />
-                            </div>
-
-                            <div className="form-group">
-                                <label>IMEI No 1</label>
-                                <input type="text" name="imei1" value={formData.imei1} onChange={handleChange} />
-                            </div>
-
-                            <div className="form-group">
-                                <label>IMEI No 2</label>
-                                <input type="text" name="imei2" value={formData.imei2} onChange={handleChange} />
-                            </div>
-
-                            <div className="form-group">
-                                <label>IMEI No 3</label>
-                                <input type="text" name="imei3" value={formData.imei3} onChange={handleChange} />
-                            </div>
-
-                            <div className="form-group full-width">
-                                <label>Remarks</label>
-                                <textarea name="emailRemarks" value={formData.emailRemarks} onChange={handleChange} rows="3"></textarea>
-                            </div>
+                    {message.text && (
+                        <div className={`message ${message.type}`}>
+                            {message.text}
                         </div>
-                    </div>
-                )}
-
-                {/* Domain Account (only when requested) */}
-                {formData.requestDomainAccount && (
-                    <div className="form-section">
-                        <h3>Domain Account</h3>
-                        <div className="form-grid">
-                            <div className="form-group full-width">
-                                <label>Remarks</label>
-                                <textarea name="domainRemarks" value={formData.domainRemarks} onChange={handleChange} rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Shared Folder (only when requested) */}
-                {formData.requestSharedFolder && (
-                    <div className="form-section">
-                        <h3>Shared Folder Access</h3>
-                        <div className="form-grid">
-                            <div className="form-group full-width">
-                                <label>Remarks</label>
-                                <textarea name="sharedFolderRemarks" value={formData.sharedFolderRemarks} onChange={handleChange} rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Internet Access / FTP (only when requested) */}
-                {formData.requestInternetAccess && (
-                    <div className="form-section">
-                        <h3>Internet / FTP Access</h3>
-                        <div className="form-grid">
-                            <div className="form-group">
-                                <label>Request Type</label>
-                                <select name="requestType" value={formData.requestType} onChange={handleChange}>
-                                    <option value="Privilege Access">Privilege Access</option>
-                                    <option value="Normal Access">Normal Access</option>
-                                    <option value="Limited Access">Limited Access</option>
-                                    <option value="No Internet Access">No Internet Access</option>
-                                </select>
-                            </div>
-                            <div className="form-group full-width">
-                                <label>Remarks</label>
-                                <textarea name="internetRemarks" value={formData.internetRemarks} onChange={handleChange} rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* NExAS Section */}
-                {formData.requestNexas && (
-                    <div className="form-section">
-                        <h3>NExAS</h3>
-                        <div className="form-grid">
-                            <div className="form-group">
-                                <label>Company Code <span className="required">*</span></label>
-                                <select
-                                    value={formData.companyCode?.id || ''}
-                                    onChange={(e) => {
-                                        const code = masterData.companyCodes.find(c => c.id === parseInt(e.target.value));
-                                        handleSelectChange('companyCode', code);
-                                    }}
-                                >
-                                    <option value="">Select</option>
-                                    {masterData.companyCodes.map(code => (
-                                        <option key={code.id} value={code.id}>
-                                            {code.companyName}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div className="form-group">
-                                <label>Cost Center Name <span className="required">*</span></label>
-                                <select
-                                    value={formData.costCenter?.id || ''}
-                                    onChange={(e) => {
-                                        const center = masterData.costCenters.find(c => c.id === parseInt(e.target.value));
-                                        handleSelectChange('costCenter', center);
-                                    }}
-                                >
-                                    <option value="">Select</option>
-                                    {masterData.costCenters.map(center => (
-                                        <option key={center.id} value={center.id}>
-                                            {center.costCenterName}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div className="form-group">
-                                <label>Cost Center Code</label>
-                                <input type="text" name="costCenterCode" value={formData.costCenterCode} onChange={handleChange} />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Operation Range</label>
-                                <input type="text" name="operationRange" value={formData.operationRange} onChange={handleChange} />
-                            </div>
-
-                            <div className="form-group full-width">
-                                <h4>Request Type (Please select first):</h4>
-                                <div className="checkbox-grid">
-                                    <label className="checkbox-label">
-                                        <input type="checkbox" name="hoAccountingUser" checked={formData.hoAccountingUser} onChange={handleChange} />
-                                        HO Accounting User
-                                    </label>
-                                    <label className="checkbox-label">
-                                        <input type="checkbox" name="branchAccountingUser" checked={formData.branchAccountingUser} onChange={handleChange} />
-                                        Branch Accounting User
-                                    </label>
-                                    <label className="checkbox-label">
-                                        <input type="checkbox" name="itUser" checked={formData.itUser} onChange={handleChange} />
-                                        IT User
-                                    </label>
-                                    <label className="checkbox-label">
-                                        <input type="checkbox" name="reportDisplayOnly" checked={formData.reportDisplayOnly} onChange={handleChange} />
-                                        Report display only User
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div className="form-group full-width">
-                                <div className="optional-menu-box">
-                                    <h4>Optional menu:</h4>
-                                    <div className="checkbox-grid">
-                                        <label className="checkbox-label">
-                                            <input type="checkbox" name="paymentProposal" checked={formData.paymentProposal} onChange={handleChange} />
-                                            Payment Proposal
-                                        </label>
-                                        <label className="checkbox-label">
-                                            <input type="checkbox" name="voidCheque" checked={formData.voidCheque} onChange={handleChange} />
-                                            Void Cheque
-                                        </label>
-                                        <label className="checkbox-label">
-                                            <input type="checkbox" name="exchangeRateMaintenance" checked={formData.exchangeRateMaintenance} onChange={handleChange} />
-                                            Exchange Rate Maintenance
-                                        </label>
-                                        <label className="checkbox-label">
-                                            <input type="checkbox" name="issueChecque" checked={formData.issueChecque} onChange={handleChange} />
-                                            Issue Cheque
-                                        </label>
-                                        <label className="checkbox-label">
-                                            <input type="checkbox" name="offsetAccount" checked={formData.offsetAccount} onChange={handleChange} />
-                                            Offset Account
-                                        </label>
-                                        <label className="checkbox-label">
-                                            <input type="checkbox" name="paymentApproval" checked={formData.paymentApproval} onChange={handleChange} />
-                                            Payment Approval
-                                        </label>
-                                        <label className="checkbox-label">
-                                            <input type="checkbox" name="openCloseSchedule" checked={formData.openCloseSchedule} onChange={handleChange} />
-                                            Open/Close Schedule
-                                        </label>
-                                        <label className="checkbox-label">
-                                            <input type="checkbox" name="taxReport" checked={formData.taxReport} onChange={handleChange} />
-                                            Tax Report
-                                        </label>
-                                        <label className="checkbox-label">
-                                            <input type="checkbox" name="addDeleteMasterMaintenance" checked={formData.addDeleteMasterMaintenance} onChange={handleChange} />
-                                            Add/Delete master Maintenance
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* NExAS Payment operations (compact row above remarks) */}
-                            <div className="form-group full-width">
-                                <div className="nexas-ops">
-                                    <label className="checkbox-label small">
-                                        <input type="checkbox" name="paymentOperationBranch" checked={formData.paymentOperationBranch} onChange={handleChange} />
-                                        <span className="label-text">Payment operation of branch</span>
-                                    </label>
-                                    <label className="checkbox-label small">
-                                        <input type="checkbox" name="batchInput" checked={formData.batchInput} onChange={handleChange} />
-                                        <span className="label-text">Batch Input</span>
-                                    </label>
-                                    <label className="checkbox-label small">
-                                        <input type="checkbox" name="sepaIbacsDataDownload" checked={formData.sepaIbacsDataDownload} onChange={handleChange} />
-                                        <span className="label-text">SEPA-IBACS data Download</span>
-                                    </label>
-                                </div>
-                                <div className="form-group">
-                                    <label>Remarks</label>
-                                    <textarea name="paymentRemarks" value={formData.paymentRemarks} onChange={handleChange} rows="2"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* NEWINS Section */}
-                {formData.requestNewins && (
-                    <div className="form-section">
-                        <h3>NEWINS</h3>
-                        <div className="form-grid">
-                            <div className="form-group">
-                                <label>Requested Branch Code</label>
-                                <input type="text" name="requestedBranchCode" value={formData.requestedBranchCode} onChange={handleChange} />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Requested NEWINS ID</label>
-                                <input type="text" name="requestedNewinsId" value={formData.requestedNewinsId} onChange={handleChange} />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Operator Code</label>
-                                <input type="text" name="operatorCode" value={formData.operatorCode} onChange={handleChange} />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Request Type</label>
-                                <select name="newinsRequest" value={formData.newinsRequest} onChange={handleChange}>
-                                    <option value="New">New</option>
-                                    <option value="Change">Change</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* GS-NET Section */}
-                {formData.requestGsnet && (
-                    <div className="form-section">
-                        <h3>GS-NET</h3>
-                        <div className="form-grid">
-                            <div className="form-group full-width">
-                                <label>Requested GS/NET Branch Code</label>
-                                <textarea name="requestedGsnetBranch" value={formData.requestedGsnetBranch} onChange={handleChange} rows="3"></textarea>
-                            </div>
-
-                            <div className="form-group">
-                                <label>Requested Division Name <span className="required">*</span></label>
-                                <select name="requestedDivisionName" value={formData.requestedDivisionName} onChange={handleChange}>
-                                    <option value="BOTH (OCN IMPORT & EXPORT)">BOTH (OCN IMPORT & EXPORT)</option>
-                                    <option value="OCN EXPORT">OCN EXPORT</option>
-                                    <option value="OCN IMPORT">OCN IMPORT</option>
-                                </select>
-                            </div>
-
-                            <div className="form-group">
-                                <label>Requested Primary Division</label>
-                                <select name="requestedPrimaryDivision" value={formData.requestedPrimaryDivision} onChange={handleChange}>
-                                    <option value="N/A">N/A</option>
-                                    <option value="OCN EXPORT">OCN EXPORT</option>
-                                    <option value="OCN IMPORT">OCN IMPORT</option>
-                                </select>
-                            </div>
-
-                            <div className="form-group">
-                                <label>Requested User Role <span className="required">*</span></label>
-                                <select name="requestedUserRole" value={formData.requestedUserRole} onChange={handleChange}>
-                                    <option value="USER">USER</option>
-                                    <option value="MANAGER">MANAGER</option>
-                                </select>
-                            </div>
-
-                            <div className="form-group full-width">
-                                <label>Remarks</label>
-                                <textarea name="gsnetRemarks" value={formData.gsnetRemarks} onChange={handleChange} rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Biometric / Access Card Section */}
-                {formData.requestBluetoothAccessCard && (
-                    <div className="form-section">
-                        <h3>Biometric / Access Card</h3>
-                        <div className="form-grid">
-                            <div className="form-group full-width">
-                                <label>Remarks</label>
-                                <textarea name="biometricRemarks" value={formData.biometricRemarks} onChange={handleChange} rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Internal Application Section */}
-                {formData.requestInternalApplication && (
-                    <div className="form-section">
-                        <h3>Internal Application</h3>
-                        <div className="form-grid">
-                            <div className="form-group">
-                                <label>Application Name</label>
-                                <input type="text" name="internalApplication" value={formData.internalApplication} onChange={handleChange} />
-                            </div>
-                            <div className="form-group full-width">
-                                <label>Remarks</label>
-                                <textarea name="internalAppRemarks" value={formData.internalAppRemarks} onChange={handleChange} rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* USB Access Section */}
-                {formData.requestUsbAccess && (
-                    <div className="form-section">
-                        <h3>USB Access</h3>
-                        <div className="form-grid">
-                            <div className="form-group">
-                                <label>Access For</label>
-                                <input type="text" name="usbAccessFor" value={formData.usbAccessFor} onChange={handleChange} />
-                            </div>
-                            <div className="form-group">
-                                <label>Device Details</label>
-                                <input type="text" name="usbDetails" value={formData.usbDetails} onChange={handleChange} />
-                            </div>
-                            <div className="form-group full-width">
-                                <label>Remarks</label>
-                                <textarea name="usbRemarks" value={formData.usbRemarks} onChange={handleChange} rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* VPN Access Section */}
-                {formData.requestVpnAccess && (
-                    <div className="form-section">
-                        <h3>VPN Access</h3>
-                        <div className="form-grid">
-                            <div className="form-group">
-                                <label>Domain ID</label>
-                                <input type="text" name="domainId" value={formData.domainId} onChange={handleChange} />
-                            </div>
-                            <div className="form-group">
-                                <label>Email ID</label>
-                                <input type="email" name="emailId" value={formData.emailId} onChange={handleChange} />
-                            </div>
-                            <div className="form-group">
-                                <label>MPLS / Non MPLS</label>
-                                <input type="text" name="mplsNonMpls" value={formData.mplsNonMpls} onChange={handleChange} />
-                            </div>
-                            <div className="form-group full-width">
-                                <label>Remarks</label>
-                                <textarea name="vpnRemarks" value={formData.vpnRemarks} onChange={handleChange} rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* HardDisk / PenDrive Section */}
-                {formData.requestHardDiskPenDrive && (
-                    <div className="form-section">
-                        <h3>HardDisk / PenDrive</h3>
-                        <div className="form-grid">
-                            <div className="form-group full-width">
-                                <label>Remarks</label>
-                                <textarea name="hardDiskRemarks" value={formData.hardDiskRemarks} onChange={handleChange} rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* NEx-GLOW Section */}
-                {formData.requestNewGlow && (
-                    <div className="form-section">
-                        <h3>NEx-GLOW</h3>
-                        <div className="form-grid">
-                            <div className="form-group full-width">
-                                <label>Remarks</label>
-                                <textarea name="newGlowRemarks" value={formData.newGlowRemarks} onChange={handleChange} rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Any Other Asset Section */}
-                {formData.requestAnyOtherAsset && (
-                    <div className="form-section">
-                        <h3>Any Other Asset</h3>
-                        <div className="form-grid">
-                            <div className="form-group full-width">
-                                <label>Remarks</label>
-                                <textarea name="otherAssetRemarks" value={formData.otherAssetRemarks} onChange={handleChange} rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                
-
-                {/* Form Actions */}
-                <div className="form-actions">
-                    <button type="button" onClick={handleReset} className="btn-reset">RESET</button>
-                    <button type="submit" disabled={isLoading} className="btn-submit">
-                        {isLoading ? 'SENDING...' : 'SEND'}
-                    </button>
-                    {userRole === 'HR' && (
-                        <button type="button" onClick={onClose} className="btn-back">BACK</button>
                     )}
+
+                    <form onSubmit={handleSubmit} className="paper-form">
+                        <table className="paper-table" aria-label="Employee information">
+                            <tbody>
+                                <tr className="paper-section-row">
+                                    <td className="paper-section" colSpan={4}>Employee Information</td>
+                                </tr>
+                                <tr>
+                                    <td className="paper-label">Employee Code<span className="required">*</span></td>
+                                    <td className="paper-field">
+                                        <input
+                                            className="paper-input"
+                                            type="text"
+                                            name="employeeCode"
+                                            value={formData.employeeCode}
+                                            onChange={handleChange}
+                                            onBlur={(e) => fetchEmployeeDetails(e.target.value)}
+                                            required
+                                        />
+                                    </td>
+                                    <td className="paper-label">Full Name<span className="required">*</span></td>
+                                    <td className="paper-field">
+                                        <input
+                                            className="paper-input"
+                                            type="text"
+                                            name="fullName"
+                                            value={formData.fullName}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="paper-label">Branch<span className="required">*</span></td>
+                                        <td className="paper-field">
+                                            <input
+                                                className="paper-input"
+                                                type="text"
+                                                value={formData.branch?.branchName || ''}
+                                                placeholder="Auto-fetched branch"
+                                                readOnly
+                                            />
+                                        </td>
+                                    <td className="paper-label">Department<span className="required">*</span></td>
+                                    <td className="paper-field">
+                                        <input
+                                            className="paper-input"
+                                            type="text"
+                                            value={formData.department?.departmentName || ''}
+                                            placeholder="Auto-fetched department"
+                                            readOnly
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="paper-label">Designation<span className="required">*</span></td>
+                                    <td className="paper-field">
+                                        <input
+                                            className="paper-input"
+                                            type="text"
+                                            name="designation"
+                                            value={formData.designation}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </td>
+                                    <td className="paper-label">Reporting Officer<span className="required">*</span></td>
+                                        <td className="paper-field">
+                                            <input
+                                                className="paper-input"
+                                                type="text"
+                                                value={formData.reportingOfficer?.officerName || ''}
+                                                placeholder="Auto-fetched reporting officer"
+                                                readOnly
+                                            />
+                                        </td>
+                                </tr>
+
+                                <tr>
+                                    <td className="paper-label">Scope of Work<span className="required">*</span></td>
+                                    <td className="paper-field">
+                                        <select
+                                            className="paper-select"
+                                            name="scopeOfWork"
+                                            value={formData.scopeOfWork}
+                                            onChange={handleChange}
+                                            required
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="Export">Export</option>
+                                            <option value="Import">Import</option>
+                                            <option value="Both">Both</option>
+                                        </select>
+                                    </td>
+                                    <td className="paper-label">Sub-Branch<span className="required">*</span></td>
+                                    <td className="paper-field">
+                                        <select
+                                            className="paper-select"
+                                            value={formData.subBranch?.id || ''}
+                                            onChange={(e) => {
+                                                const branch = masterData.branches.find(b => b.id === parseInt(e.target.value));
+                                                handleSelectChange('subBranch', branch);
+                                            }}
+                                            required
+                                        >
+                                            <option value="">Select</option>
+                                            {masterData.branches.map(branch => (
+                                                <option key={branch.id} value={branch.id}>
+                                                    {branch.branchName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td className="paper-label">Employee Type<span className="required">*</span></td>
+                                    <td className="paper-field">
+                                        <div className="paper-radio-row">
+                                            {['Permanent', 'Probation'].map(opt => (
+                                                <label key={opt} className="paper-radio">
+                                                    <input
+                                                        type="radio"
+                                                        name="employeeType"
+                                                        value={opt}
+                                                        checked={formData.employeeType === opt}
+                                                        onChange={handleChange}
+                                                    />
+                                                    <span>{opt}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </td>
+                                    <td className="paper-label">Request<span className="required">*</span></td>
+                                    <td className="paper-field">
+                                        <div className="paper-radio-row">
+                                            {['New', 'Change'].map(opt => (
+                                                <label key={opt} className="paper-radio">
+                                                    <input
+                                                        type="radio"
+                                                        name="requestAction"
+                                                        value={opt}
+                                                        checked={formData.requestAction === opt}
+                                                        onChange={handleChange}
+                                                    />
+                                                    <span>{opt}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="paper-label">Contact No</td>
+                                    <td className="paper-field">
+                                        <input
+                                            className="paper-input"
+                                            type="tel"
+                                            name="contactNo"
+                                            value={formData.contactNo}
+                                            onChange={handleChange}
+                                        />
+                                    </td>
+                                    <td className="paper-label">Requested By<span className="required">*</span></td>
+                                    <td className="paper-field">
+                                        <input
+                                            className="paper-input"
+                                            type="text"
+                                            name="requestedBy"
+                                            value={formData.requestedBy}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table className="paper-table" aria-label="Request for">
+                            <tbody>
+                                <tr className="paper-section-row">
+                                    <td className="paper-section" colSpan={4}>Request For</td>
+                                </tr>
+                                <tr>
+                                    <td className="paper-field" colSpan={4}>
+                                        <div className="paper-check-grid">
+                                            <PaperCheckbox name="requestEmailId" label="Email ID" />
+                                            <PaperCheckbox name="requestDomainAccount" label="Domain Account" />
+                                            <PaperCheckbox name="requestBluetoothAccessCard" label="Biometric / Access Card" />
+                                            <PaperCheckbox name="requestSharedFolder" label="Shared Folder" />
+                                            <PaperCheckbox name="requestInternetAccess" label="Internet Access / FTP Access" />
+                                            <PaperCheckbox name="requestNewins" label="NEWINS" />
+                                            <PaperCheckbox name="requestNexas" label="NExAS" />
+                                            <PaperCheckbox name="requestGsnet" label="GS-NET" />
+                                            <PaperCheckbox name="requestInternalApplication" label="Internal Application" />
+                                            <PaperCheckbox name="requestUsbAccess" label="USB Access" />
+                                            <PaperCheckbox name="requestVpnAccess" label="VPN Access" />
+                                            <PaperCheckbox name="requestHardDiskPenDrive" label="HardDisk / PenDrive" />
+                                            <PaperCheckbox name="requestNewGlow" label="NEx-GLOW" />
+                                            <PaperCheckbox name="requestAnyOtherAsset" label="Any Other Asset" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        {formData.requestEmailId && (
+                            <table className="paper-table" aria-label="Email ID">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side" rowSpan={6}>Email ID</td>
+                                        <td className="paper-label">Email Domain</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <select className="paper-select" name="emailDomain" value={formData.emailDomain} onChange={handleChange}>
+                                                <option value="">Select</option>
+                                                <option value="Domain1">Domain 1</option>
+                                                <option value="Domain2">Domain 2</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Employee Type</td>
+                                        <td className="paper-field">
+                                            <select className="paper-select" name="employeeType2" value={formData.employeeType2} onChange={handleChange}>
+                                                <option value="">Select</option>
+                                                <option value="Type1">Type 1</option>
+                                                <option value="Type2">Type 2</option>
+                                            </select>
+                                        </td>
+                                        <td className="paper-field">
+                                            <div className="paper-inline">
+                                                <span className="paper-inline-label">Requested E-Mail Id</span>
+                                                <input className="paper-input" type="email" name="requestedEmailId" value={formData.requestedEmailId} onChange={handleChange} />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Company Provided Mobile</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <div className="paper-inline">
+                                                <label className="paper-check">
+                                                    <input type="checkbox" name="companyProvidedMobile" checked={formData.companyProvidedMobile} onChange={handleChange} />
+                                                    <span>Yes</span>
+                                                </label>
+                                                <input className="paper-input" type="text" name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="Mobile Make & Model / Number" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Company Provided SIM Card</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <label className="paper-check">
+                                                <input type="checkbox" name="companyProvidedSim" checked={formData.companyProvidedSim} onChange={handleChange} />
+                                                <span>Yes</span>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Mobile Access (Intune)</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <div className="paper-inline">
+                                                <label className="paper-check">
+                                                    <input type="checkbox" name="mobileAccessIntune" checked={formData.mobileAccessIntune} onChange={handleChange} />
+                                                    <span>Yes</span>
+                                                </label>
+                                                <input className="paper-input" type="text" name="mobileNo" value={formData.mobileNo} onChange={handleChange} placeholder="Mobile No." />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">IMEI No(s) / Remarks</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <div className="paper-3col">
+                                                <input className="paper-input" type="text" name="imei1" value={formData.imei1} onChange={handleChange} placeholder="IMEI No 1" />
+                                                <input className="paper-input" type="text" name="imei2" value={formData.imei2} onChange={handleChange} placeholder="IMEI No 2" />
+                                                <input className="paper-input" type="text" name="imei3" value={formData.imei3} onChange={handleChange} placeholder="IMEI No 3" />
+                                            </div>
+                                            <textarea className="paper-textarea" name="emailRemarks" value={formData.emailRemarks} onChange={handleChange} rows={2} placeholder="Remarks" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestDomainAccount && (
+                            <table className="paper-table" aria-label="Domain Account">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side">Domain Account</td>
+                                        <td className="paper-field" colSpan={3}>
+                                            <textarea className="paper-textarea" name="domainRemarks" value={formData.domainRemarks} onChange={handleChange} rows={3} placeholder="Remarks" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestBluetoothAccessCard && (
+                            <table className="paper-table" aria-label="Biometric / Access Card">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side">Biometric / Access Card</td>
+                                        <td className="paper-field" colSpan={3}>
+                                            <textarea className="paper-textarea" name="biometricRemarks" value={formData.biometricRemarks} onChange={handleChange} rows={3} placeholder="Remarks" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestSharedFolder && (
+                            <table className="paper-table" aria-label="Shared Folder">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side">Shared Folder Access</td>
+                                        <td className="paper-field" colSpan={3}>
+                                            <textarea className="paper-textarea" name="sharedFolderRemarks" value={formData.sharedFolderRemarks} onChange={handleChange} rows={3} placeholder="Remarks" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestInternetAccess && (
+                            <table className="paper-table" aria-label="Internet / FTP Access">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side" rowSpan={2}>Internet Access / FTP Access</td>
+                                        <td className="paper-label">Request Type</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <div className="paper-radio-row">
+                                                {['Privilege Access', 'Normal Access', 'Limited Access', 'No Internet Access'].map(opt => (
+                                                    <label key={opt} className="paper-radio">
+                                                        <input
+                                                            type="radio"
+                                                            name="requestType"
+                                                            value={opt}
+                                                            checked={formData.requestType === opt}
+                                                            onChange={handleChange}
+                                                        />
+                                                        <span>{opt}</span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Remarks</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <textarea className="paper-textarea" name="internetRemarks" value={formData.internetRemarks} onChange={handleChange} rows={3} />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestNewins && (
+                            <table className="paper-table" aria-label="NEWINS">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side" rowSpan={3}>NEWINS</td>
+                                        <td className="paper-label">*Requested Branch Code</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <div style={{display: 'flex', gap: '8px', alignItems: 'center'}}>
+                                                <select
+                                                    className="paper-select"
+                                                    style={{flex: 1}}
+                                                    value={masterData.branches.find(b => b.branchCode === formData.requestedBranchCode)?.id || ''}
+                                                    onChange={(e) => {
+                                                        const b = masterData.branches.find(b => b.id === parseInt(e.target.value));
+                                                        setFormData(prev => ({ ...prev, requestedBranchCode: b ? b.branchCode : '' }));
+                                                    }}
+                                                >
+                                                    <option value="">Select</option>
+                                                    {masterData.branches.map(branch => (
+                                                        <option key={branch.id} value={branch.id}>{branch.branchCode} - {branch.branchName}</option>
+                                                    ))}
+                                                </select>
+                                                <input className="paper-input" style={{width: '180px'}} type="text" value={''} readOnly />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">*Requested NEWIN's ID / Operator Code</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <input className="paper-input" type="text" name="requestedNewinsId" value={formData.requestedNewinsId} onChange={handleChange} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">*Request</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <div className="paper-radio-row">
+                                                {['New', 'Change'].map(opt => (
+                                                    <label key={opt} className="paper-radio">
+                                                        <input type="radio" name="newinsRequest" value={opt} checked={formData.newinsRequest === opt} onChange={handleChange} />
+                                                        <span>{opt}</span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestNexas && (
+                            <table className="paper-table" aria-label="NExAS">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side" rowSpan={7}>NExAS</td>
+                                        <td className="paper-label">Company Code</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <select
+                                                className="paper-select"
+                                                value={formData.companyCode?.id || ''}
+                                                onChange={(e) => {
+                                                    const code = masterData.companyCodes.find(c => c.id === parseInt(e.target.value));
+                                                    handleSelectChange('companyCode', code);
+                                                }}
+                                            >
+                                                <option value="">Select</option>
+                                                {masterData.companyCodes.map(code => (
+                                                    <option key={code.id} value={code.id}>
+                                                        {code.companyName}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Cost Center Name</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <select
+                                                className="paper-select"
+                                                value={formData.costCenter?.id || ''}
+                                                onChange={(e) => {
+                                                    const center = masterData.costCenters.find(c => c.id === parseInt(e.target.value));
+                                                    handleSelectChange('costCenter', center);
+                                                }}
+                                            >
+                                                <option value="">Select</option>
+                                                {masterData.costCenters.map(center => (
+                                                    <option key={center.id} value={center.id}>
+                                                        {center.costCenterName}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Cost Center Code</td>
+                                        <td className="paper-field"><input className="paper-input" type="text" name="costCenterCode" value={formData.costCenterCode} onChange={handleChange} /></td>
+                                        <td className="paper-field">
+                                            <div className="paper-inline">
+                                                <span className="paper-inline-label">Operation range</span>
+                                                <input className="paper-input" type="text" name="operationRange" value={formData.operationRange} onChange={handleChange} />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Request Type (Select first)</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <div className="paper-check-grid">
+                                                <label className="paper-check"><input type="checkbox" name="hoAccountingUser" checked={formData.hoAccountingUser} onChange={handleChange} /><span>HO Accounting User</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="branchAccountingUser" checked={formData.branchAccountingUser} onChange={handleChange} /><span>Branch Accounting User</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="itUser" checked={formData.itUser} onChange={handleChange} /><span>IT User</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="reportDisplayOnly" checked={formData.reportDisplayOnly} onChange={handleChange} /><span>Report display only User</span></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Optional menu</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <div className="paper-check-grid paper-check-grid-3">
+                                                <label className="paper-check"><input type="checkbox" name="paymentProposal" checked={formData.paymentProposal} onChange={handleChange} /><span>Payment Proposal</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="paymentApproval" checked={formData.paymentApproval} onChange={handleChange} /><span>Payment Approval</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="openCloseSchedule" checked={formData.openCloseSchedule} onChange={handleChange} /><span>Open/Close Schedule</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="voidCheque" checked={formData.voidCheque} onChange={handleChange} /><span>Void Cheque</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="issueChecque" checked={formData.issueChecque} onChange={handleChange} /><span>Issue Cheque</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="taxReport" checked={formData.taxReport} onChange={handleChange} /><span>Tax Report</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="exchangeRateMaintenance" checked={formData.exchangeRateMaintenance} onChange={handleChange} /><span>Exchange Rate Maintenance</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="offsetAccount" checked={formData.offsetAccount} onChange={handleChange} /><span>Offset Account</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="addDeleteMasterMaintenance" checked={formData.addDeleteMasterMaintenance} onChange={handleChange} /><span>Add/Delete master Maintenance</span></label>
+
+                                                <label className="paper-check"><input type="checkbox" name="paymentOperationBranch" checked={formData.paymentOperationBranch} onChange={handleChange} /><span>Payment operation of branch</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="batchInput" checked={formData.batchInput} onChange={handleChange} /><span>Batch Input</span></label>
+                                                <label className="paper-check"><input type="checkbox" name="sepaIbacsDataDownload" checked={formData.sepaIbacsDataDownload} onChange={handleChange} /><span>SEPA-IBACS data Download</span></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Remarks</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <textarea className="paper-textarea" name="paymentRemarks" value={formData.paymentRemarks} onChange={handleChange} rows={2} placeholder="Remarks" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Note</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <div style={{fontSize: '12px', lineHeight: '1.4', fontWeight: 700}}>
+                                                <p>*If the user will use TV menu in NExAS, tell HO Admin to create employee master please.</p>
+                                                <p>*If you want to be in charge of other Company or Branch or Region fill in "Operation Range" or "Display Range" please.</p>
+                                                <p>*Please apply through H.O Accounting manager.</p>
+                                                <p>*If you want to change your status, please submit your applications each user. (e.g. If you want to 3 create user and 5 delete user, please submit 8 user application for each user.)</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestGsnet && (
+                            <table className="paper-table" aria-label="GS-NET">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side" rowSpan={4}>GS-NET</td>
+                                        <td className="paper-label">Requested GSNET Branch Code</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <textarea className="paper-textarea" name="requestedGsnetBranch" value={formData.requestedGsnetBranch} onChange={handleChange} rows={3} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Requested Division Name</td>
+                                        <td className="paper-field">
+                                            <select className="paper-select" name="requestedDivisionName" value={formData.requestedDivisionName} onChange={handleChange}>
+                                                <option value="BOTH (OCN IMPORT & EXPORT)">BOTH (OCN IMPORT & EXPORT)</option>
+                                                <option value="OCN EXPORT">OCN EXPORT</option>
+                                                <option value="OCN IMPORT">OCN IMPORT</option>
+                                            </select>
+                                        </td>
+                                        <td className="paper-field">
+                                            <div className="paper-inline">
+                                                <span className="paper-inline-label">Requested Primary Division</span>
+                                                <select className="paper-select" name="requestedPrimaryDivision" value={formData.requestedPrimaryDivision} onChange={handleChange}>
+                                                    <option value="N/A">N/A</option>
+                                                    <option value="OCN EXPORT">OCN EXPORT</option>
+                                                    <option value="OCN IMPORT">OCN IMPORT</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Requested User Role</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <div className="paper-radio-row">
+                                                {['USER', 'MANAGER'].map(opt => (
+                                                    <label key={opt} className="paper-radio">
+                                                        <input type="radio" name="requestedUserRole" value={opt} checked={formData.requestedUserRole === opt} onChange={handleChange} />
+                                                        <span>{opt}</span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Remarks</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <textarea className="paper-textarea" name="gsnetRemarks" value={formData.gsnetRemarks} onChange={handleChange} rows={3} />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestInternalApplication && (
+                            <table className="paper-table" aria-label="Internal Application">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side" rowSpan={2}>Internal Application</td>
+                                        <td className="paper-label">Application</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <input className="paper-input" type="text" name="internalApplication" value={formData.internalApplication} onChange={handleChange} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Remarks</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <textarea className="paper-textarea" name="internalAppRemarks" value={formData.internalAppRemarks} onChange={handleChange} rows={3} />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestUsbAccess && (
+                            <table className="paper-table" aria-label="USB Access">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side" rowSpan={3}>USB Access</td>
+                                        <td className="paper-label">Access For</td>
+                                        <td className="paper-field" colSpan={2}><input className="paper-input" type="text" name="usbAccessFor" value={formData.usbAccessFor} onChange={handleChange} /></td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">USB Details</td>
+                                        <td className="paper-field" colSpan={2}><input className="paper-input" type="text" name="usbDetails" value={formData.usbDetails} onChange={handleChange} /></td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Remarks / Reason</td>
+                                        <td className="paper-field" colSpan={2}><textarea className="paper-textarea" name="usbRemarks" value={formData.usbRemarks} onChange={handleChange} rows={3} /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestVpnAccess && (
+                            <table className="paper-table" aria-label="VPN Access">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side" rowSpan={4}>VPN Access</td>
+                                        <td className="paper-label">Domain ID</td>
+                                        <td className="paper-field" colSpan={2}><input className="paper-input" type="text" name="domainId" value={formData.domainId} onChange={handleChange} /></td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Email ID</td>
+                                        <td className="paper-field" colSpan={2}><input className="paper-input" type="email" name="emailId" value={formData.emailId} onChange={handleChange} /></td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">MPLS / NON MPLS</td>
+                                        <td className="paper-field" colSpan={2}><input className="paper-input" type="text" name="mplsNonMpls" value={formData.mplsNonMpls} onChange={handleChange} /></td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">Remarks</td>
+                                        <td className="paper-field" colSpan={2}><textarea className="paper-textarea" name="vpnRemarks" value={formData.vpnRemarks} onChange={handleChange} rows={3} /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestHardDiskPenDrive && (
+                            <table className="paper-table" aria-label="HardDisk / PenDrive">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side">HardDisk / PenDrive</td>
+                                        <td className="paper-field" colSpan={3}><textarea className="paper-textarea" name="hardDiskRemarks" value={formData.hardDiskRemarks} onChange={handleChange} rows={3} placeholder="Remarks" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestNewGlow && (
+                            <table className="paper-table" aria-label="NEx-GLOW">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side" rowSpan={3}>NEx-GLOW</td>
+                                        <td className="paper-label">*Project :</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <input className="paper-input" type="text" name="newGlowProject" value={formData.newGlowProject} onChange={handleChange} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">*Ware-House :</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <input className="paper-input" type="text" name="newGlowWarehouse" value={formData.newGlowWarehouse} onChange={handleChange} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="paper-label">*Remarks :</td>
+                                        <td className="paper-field" colSpan={2}>
+                                            <textarea className="paper-textarea" name="newGlowRemarks" value={formData.newGlowRemarks} onChange={handleChange} rows={2} />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        {formData.requestAnyOtherAsset && (
+                            <table className="paper-table" aria-label="Any Other Asset">
+                                <tbody>
+                                    <tr>
+                                        <td className="paper-side">Any Other Asset</td>
+                                        <td className="paper-field" colSpan={3}><textarea className="paper-textarea" name="otherAssetRemarks" value={formData.otherAssetRemarks} onChange={handleChange} rows={3} placeholder="Remarks" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
+
+                        <table className="paper-table" aria-label="Final remarks">
+                            <tbody>
+                               
+                                <tr>
+                                    <td className="paper-label">*Remarks/Reason</td>
+                                    <td className="paper-field" colSpan={3}>
+                                        <textarea
+                                            className="paper-textarea"
+                                            name="remarksReason"
+                                            value={formData.remarksReason}
+                                            onChange={handleChange}
+                                            rows={2}
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="paper-label">*Send To RO:</td>
+                                    <td className="paper-field" colSpan={3}>
+                                        <div className="paper-sendto">
+                                            <span className="paper-radio-dot" aria-hidden="true" />
+                                            <input
+                                                className="paper-input"
+                                                type="text"
+                                                name="sendToRo"
+                                                value={formData.sendToRo}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div className="paper-actions">
+                            <button type="submit" disabled={isLoading} className="paper-btn">
+                                {isLoading ? 'SENDING...' : 'SEND'}
+                            </button>
+                            <button type="button" onClick={handleReset} className="paper-btn">RESET</button>
+                            <button type="button" className="paper-btn">HELP</button>
+                            {onClose && (
+                                <button type="button" onClick={onClose} className="paper-btn">BACK</button>
+                            )}
+                        </div>
+                    </form>
                 </div>
-            </form>
             </div>
         </div>
     );

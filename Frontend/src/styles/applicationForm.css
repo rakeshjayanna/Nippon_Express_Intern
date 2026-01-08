@@ -282,39 +282,288 @@
     }
 
     .form-actions {
-        .form-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            margin-top: 18px;
-            padding-top: 10px;
-            border-top: none;
-        }
-        .form-actions button {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .btn-reset {
-            background: #f5f5f5;
-            color: #333;
-            border: 1px solid #e0e0e0;
-        }
-        .btn-reset:hover { transform: translateY(-1px); }
-        .btn-submit {
-            background: #000;
-            color: white;
-            border: 1px solid #000;
-        }
-        .btn-submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
-        .btn-back { background: #fff; color: #333; border: 1px solid #e0e0e0; }
-        .btn-back:hover { background: #fafafa; }
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        margin-top: 18px;
+        padding-top: 10px;
+        border-top: none;
+    }
+
+    .form-actions button {
+        padding: 10px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-reset {
+        background: #f5f5f5;
+        color: #333;
+        border: 1px solid #e0e0e0;
+    }
+
+    .btn-reset:hover {
+        transform: translateY(-1px);
+    }
+
+    .btn-submit {
+        background: #000;
+        color: white;
+        border: 1px solid #000;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .btn-submit:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    .btn-back {
+        background: #fff;
+        color: #333;
+        border: 1px solid #e0e0e0;
+    }
+
+    .btn-back:hover {
+        background: #fafafa;
+    }
 }
+
+/* =========================
+   Paper-style Form Layout
+   ========================= */
+
+.paper-sheet {
+    background: #fff;
+    border: 1px solid #000;
+    padding: 12px;
+    overflow-x: auto;
+}
+
+.paper-titlebar {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.paper-title {
+    border: 1px solid #000;
+    padding: 6px 10px;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.3px;
+}
+
+.paper-close-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 34px;
+    height: 34px;
+    border: 1px solid #000;
+    background: #fff;
+    color: #000;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.paper-form {
+    margin: 0;
+}
+
+.paper-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin: 0 0 10px 0;
+}
+
+.paper-table td {
+    border: 1px solid #000;
+    padding: 6px 8px;
+    vertical-align: top;
+    font-size: 12px;
+    color: #000;
+}
+
+.paper-section-row td {
+    padding: 6px 8px;
+}
+
+.paper-section {
+    background: #f2f2f2;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.paper-side {
+    width: 160px;
+    background: #f2f2f2;
+    font-weight: 700;
+}
+
+.paper-label {
+    width: 180px;
+    font-weight: 600;
+}
+
+.paper-field {
+    font-weight: 400;
+}
+
+.paper-input,
+.paper-select,
+.paper-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 12px;
+    font-family: inherit;
+    border: 1px solid #666;
+    background: #fff;
+    color: #000;
+}
+
+.paper-input,
+.paper-select {
+    height: 24px;
+    padding: 2px 6px;
+}
+
+.paper-textarea {
+    padding: 6px;
+    resize: vertical;
+}
+
+.paper-radio-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.paper-radio {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.paper-check-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px 14px;
+}
+
+.paper-check-grid.paper-check-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.paper-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.paper-inline {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 8px;
+    align-items: center;
+}
+
+.paper-inline-label {
+    font-weight: 600;
+}
+
+.paper-inline-wrap {
+    grid-template-columns: 1fr;
+}
+
+.paper-3col {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.paper-sendto {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 8px;
+    align-items: center;
+}
+
+.paper-radio-dot {
+    width: 12px;
+    height: 12px;
+    border: 1px solid #000;
+    border-radius: 999px;
+    display: inline-block;
+}
+
+.paper-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 12px;
+}
+
+.paper-btn {
+    padding: 3px 14px;
+    border: 1px solid #000;
+    background: #fff;
+    color: #000;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 120ms ease, box-shadow 120ms ease, transform 60ms ease;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.15);
+}
+
+.paper-btn:hover:not(:disabled) {
+    background: #f2f2f2;
+}
+
+.paper-btn:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+}
+
+.paper-btn:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+}
+
+.paper-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+@media (max-width: 768px) {
+    .paper-check-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .paper-side {
+        width: 120px;
+    }
+    .paper-inline {
+        grid-template-columns: 1fr;
+    }
+    .paper-3col {
+        grid-template-columns: 1fr;
+    }
 }

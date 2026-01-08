@@ -22,16 +22,26 @@ public class ApplicationForm {
     private MasterBranch branch;
     
     private String designation;
+
+    // As per paper form (top section)
+    private String scopeOfWork;
     
     @ManyToOne
     @JoinColumn(name = "reporting_officer_id")
     private MasterReportingOfficer reportingOfficer;
 
     @ManyToOne
+    @JoinColumn(name = "sub_branch_id")
+    private MasterBranch subBranch;
+
+    @ManyToOne
     @JoinColumn(name = "department_id")
     private MasterDepartment department;
     
     private String employeeType; // Permanent / Probation / New / Change
+
+    // Request type (top section): New / Change
+    private String requestAction;
     
     private String contactNo;
     
@@ -232,6 +242,14 @@ public class ApplicationForm {
         this.designation = designation;
     }
 
+    public String getScopeOfWork() {
+        return scopeOfWork;
+    }
+
+    public void setScopeOfWork(String scopeOfWork) {
+        this.scopeOfWork = scopeOfWork;
+    }
+
     public MasterReportingOfficer getReportingOfficer() {
         return reportingOfficer;
     }
@@ -240,12 +258,28 @@ public class ApplicationForm {
         this.reportingOfficer = reportingOfficer;
     }
 
+    public MasterBranch getSubBranch() {
+        return subBranch;
+    }
+
+    public void setSubBranch(MasterBranch subBranch) {
+        this.subBranch = subBranch;
+    }
+
     public String getEmployeeType() {
         return employeeType;
     }
 
     public void setEmployeeType(String employeeType) {
         this.employeeType = employeeType;
+    }
+
+    public String getRequestAction() {
+        return requestAction;
+    }
+
+    public void setRequestAction(String requestAction) {
+        this.requestAction = requestAction;
     }
 
     public String getContactNo() {
