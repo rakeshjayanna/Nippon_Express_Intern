@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface MasterDepartmentRepository extends JpaRepository<MasterDepartment, Long> {
     List<MasterDepartment> findByActiveTrue();
+
+    boolean existsByDepartmentCode(String departmentCode);
 }

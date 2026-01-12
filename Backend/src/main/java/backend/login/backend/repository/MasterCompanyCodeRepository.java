@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface MasterCompanyCodeRepository extends JpaRepository<MasterCompanyCode, Long> {
     List<MasterCompanyCode> findByActiveTrue();
+
+    boolean existsByCompanyCode(String companyCode);
 }

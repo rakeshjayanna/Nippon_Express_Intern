@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface MasterReportingOfficerRepository extends JpaRepository<MasterReportingOfficer, Long> {
     List<MasterReportingOfficer> findByActiveTrue();
+
+    boolean existsByOfficerCode(String officerCode);
 }

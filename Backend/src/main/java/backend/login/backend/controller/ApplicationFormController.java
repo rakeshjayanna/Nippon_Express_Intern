@@ -156,9 +156,109 @@ public class ApplicationFormController {
             result.put("employeeCode", latest.getEmployeeCode());
             result.put("fullName", latest.getFullName());
             result.put("designation", latest.getDesignation());
+            result.put("scopeOfWork", latest.getScopeOfWork());
+            result.put("employeeType", latest.getEmployeeType());
+            result.put("requestAction", latest.getRequestAction());
+            result.put("requestedBy", latest.getRequestedBy());
+            result.put("contactNo", latest.getContactNo());
+
+            // Request toggles
+            result.put("requestEmailId", latest.getRequestEmailId());
+            result.put("requestDomainAccount", latest.getRequestDomainAccount());
+            result.put("requestBluetoothAccessCard", latest.getRequestBluetoothAccessCard());
+            result.put("requestSharedFolder", latest.getRequestSharedFolder());
+            result.put("requestInternetAccess", latest.getRequestInternetAccess());
+            result.put("requestNewins", latest.getRequestNewins());
+            result.put("requestNexas", latest.getRequestNexas());
+            result.put("requestGsnet", latest.getRequestGsnet());
+            result.put("requestVpnAccess", latest.getRequestVpnAccess());
+            result.put("requestHardDiskPenDrive", latest.getRequestHardDiskPenDrive());
+            result.put("requestNewGlow", latest.getRequestNewGlow());
+            result.put("requestInternalApplication", latest.getRequestInternalApplication());
+            result.put("requestUsbAccess", latest.getRequestUsbAccess());
+            result.put("requestAnyOtherAsset", latest.getRequestAnyOtherAsset());
+
+            // Email section
+            result.put("emailDomain", latest.getEmailDomain());
+            result.put("employeeType2", latest.getEmployeeType2());
+            result.put("requestedEmailId", latest.getRequestedEmailId());
+            result.put("companyProvidedMobile", latest.getCompanyProvidedMobile());
+            result.put("mobileNumber", latest.getMobileNumber());
+            result.put("companyProvidedSim", latest.getCompanyProvidedSim());
+            result.put("mobileAccessIntune", latest.getMobileAccessIntune());
+            result.put("mobileNo", latest.getMobileNo());
+            result.put("imei1", latest.getImei1());
+            result.put("imei2", latest.getImei2());
+            result.put("imei3", latest.getImei3());
+            result.put("emailRemarks", latest.getEmailRemarks());
+
+            // Other sections
+            result.put("domainRemarks", latest.getDomainRemarks());
+            result.put("biometricRemarks", latest.getBiometricRemarks());
+            result.put("sharedFolderRemarks", latest.getSharedFolderRemarks());
+            result.put("requestType", latest.getRequestType());
+            result.put("internetRemarks", latest.getInternetRemarks());
+
+            // NEWINS
+            result.put("requestedBranchCode", latest.getRequestedBranchCode());
+            result.put("requestedNewinsId", latest.getRequestedNewinsId());
+            result.put("operatorCode", latest.getOperatorCode());
+            result.put("newinsRequest", latest.getNewinsRequest());
+
+            // NExAS
+            result.put("costCenterCode", latest.getCostCenterCode());
+            result.put("operationRange", latest.getOperationRange());
+            result.put("hoAccountingUser", latest.getHoAccountingUser());
+            result.put("branchAccountingUser", latest.getBranchAccountingUser());
+            result.put("itUser", latest.getItUser());
+            result.put("reportDisplayOnly", latest.getReportDisplayOnly());
+            result.put("paymentProposal", latest.getPaymentProposal());
+            result.put("voidCheque", latest.getVoidCheque());
+            result.put("exchangeRateMaintenance", latest.getExchangeRateMaintenance());
+            result.put("issueChecque", latest.getIssueChecque());
+            result.put("offsetAccount", latest.getOffsetAccount());
+            result.put("paymentApproval", latest.getPaymentApproval());
+            result.put("openCloseSchedule", latest.getOpenCloseSchedule());
+            result.put("taxReport", latest.getTaxReport());
+            result.put("addDeleteMasterMaintenance", latest.getAddDeleteMasterMaintenance());
+
+            // GS-NET
+            result.put("requestedGsnetBranch", latest.getRequestedGsnetBranch());
+            result.put("requestedDivisionName", latest.getRequestedDivisionName());
+            result.put("requestedPrimaryDivision", latest.getRequestedPrimaryDivision());
+            result.put("requestedUserRole", latest.getRequestedUserRole());
+            result.put("gsnetRemarks", latest.getGsnetRemarks());
+
+            // Payment operations
+            result.put("paymentOperationBranch", latest.getPaymentOperationBranch());
+            result.put("batchInput", latest.getBatchInput());
+            result.put("sepaIbacsDataDownload", latest.getSepaIbacsDataDownload());
+            result.put("paymentRemarks", latest.getPaymentRemarks());
+
+            // NEx-GLOW / Internal / USB / VPN / Asset
+            result.put("newGlowRemarks", latest.getNewGlowRemarks());
+            result.put("internalApplication", latest.getInternalApplication());
+            result.put("internalAppRemarks", latest.getInternalAppRemarks());
+            result.put("usbAccessFor", latest.getUsbAccessFor());
+            result.put("usbDetails", latest.getUsbDetails());
+            result.put("usbRemarks", latest.getUsbRemarks());
+            result.put("domainId", latest.getDomainId());
+            result.put("emailId", latest.getEmailId());
+            result.put("mplsNonMpls", latest.getMplsNonMpls());
+            result.put("vpnRemarks", latest.getVpnRemarks());
+            result.put("hardDiskRemarks", latest.getHardDiskRemarks());
+            result.put("otherAssetRemarks", latest.getOtherAssetRemarks());
+
+            // General
+            result.put("generalRemarks", latest.getGeneralRemarks());
+            result.put("remarksReason", latest.getRemarksReason());
+            result.put("sendToRo", latest.getSendToRo());
             result.put("branchId", latest.getBranch() != null ? latest.getBranch().getId() : null);
+            result.put("subBranchId", latest.getSubBranch() != null ? latest.getSubBranch().getId() : null);
             result.put("departmentId", latest.getDepartment() != null ? latest.getDepartment().getId() : null);
             result.put("reportingOfficerId", latest.getReportingOfficer() != null ? latest.getReportingOfficer().getId() : null);
+            result.put("companyCodeId", latest.getCompanyCode() != null ? latest.getCompanyCode().getId() : null);
+            result.put("costCenterId", latest.getCostCenter() != null ? latest.getCostCenter().getId() : null);
 
             return ResponseEntity.ok(result);
         } catch (Exception e) {

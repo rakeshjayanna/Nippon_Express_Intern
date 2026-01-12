@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface MasterCostCenterRepository extends JpaRepository<MasterCostCenter, Long> {
     List<MasterCostCenter> findByActiveTrue();
+
+    boolean existsByCostCenterCode(String costCenterCode);
 }

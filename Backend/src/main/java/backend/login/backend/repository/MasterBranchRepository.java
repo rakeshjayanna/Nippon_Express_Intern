@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface MasterBranchRepository extends JpaRepository<MasterBranch, Long> {
     List<MasterBranch> findByActiveTrue();
+
+    boolean existsByBranchCode(String branchCode);
 }

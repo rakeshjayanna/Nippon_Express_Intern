@@ -4,7 +4,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "application_forms")
+@Table(
+    name = "application_forms",
+    indexes = {
+        @Index(name = "idx_application_forms_employee_code_submitted_at", columnList = "employee_code, submitted_at"),
+        @Index(name = "idx_application_forms_status_submitted_at", columnList = "status, submitted_at")
+    }
+)
 public class ApplicationForm {
     
     @Id
@@ -53,7 +59,9 @@ public class ApplicationForm {
     private Boolean requestBluetoothAccessCard = false;
     private Boolean requestSharedFolder = false;
     private Boolean requestInternetAccess = false;
+    private Boolean requestNewins = false;
     private Boolean requestNexas = false;
+    private Boolean requestGsnet = false;
     private Boolean requestVpnAccess = false;
     private Boolean requestHardDiskPenDrive = false;
     private Boolean requestNewGlow = false;
@@ -62,7 +70,8 @@ public class ApplicationForm {
     private Boolean requestAnyOtherAsset = false;
     
     // Email ID Section
-    @Column(length = 1000)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String emailDomain;
     
     private String employeeType2;
@@ -97,7 +106,8 @@ public class ApplicationForm {
     private String internetRemarks;
     
     // NEWINS Section
-    @Column(length = 1000)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String requestedBranchCode;
     
     private String requestedNewinsId;
@@ -131,7 +141,8 @@ public class ApplicationForm {
     private Boolean addDeleteMasterMaintenance = false;
     
     // GS-NET Section
-    @Column(length = 2000)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String requestedGsnetBranch;
     
     private String requestedDivisionName; // BOTH (OCN IMPORT & EXPORT) / OCN EXPORT / OCN IMPORT
@@ -172,10 +183,12 @@ public class ApplicationForm {
     private String otherAssetRemarks;
     
     // General Remarks
-    @Column(length = 2000)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String generalRemarks;
     
-    @Column(length = 2000)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String remarksReason;
     
     private String sendToRo;
@@ -190,7 +203,8 @@ public class ApplicationForm {
     
     private String processedBy;
     
-    @Column(length = 1000)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String processingNotes;
 
     // Getters and Setters
@@ -338,12 +352,28 @@ public class ApplicationForm {
         this.requestInternetAccess = requestInternetAccess;
     }
 
+    public Boolean getRequestNewins() {
+        return requestNewins;
+    }
+
+    public void setRequestNewins(Boolean requestNewins) {
+        this.requestNewins = requestNewins;
+    }
+
     public Boolean getRequestNexas() {
         return requestNexas;
     }
 
     public void setRequestNexas(Boolean requestNexas) {
         this.requestNexas = requestNexas;
+    }
+
+    public Boolean getRequestGsnet() {
+        return requestGsnet;
+    }
+
+    public void setRequestGsnet(Boolean requestGsnet) {
+        this.requestGsnet = requestGsnet;
     }
 
     public Boolean getRequestVpnAccess() {
