@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/login.css";
+import nxLogo from "../assets/logo.png";
 
 function Login(){
     const [employeeId, setEmployeeId] = useState("");
@@ -63,25 +64,27 @@ function Login(){
 
 
     return(
-        <div className="container">
-            <h2>Nippon Express</h2>
-    
-            <input 
-                type="text" 
-                placeholder="Enter email address" 
-                value={employeeId}
-                onChange={(e) => setEmployeeId(e.target.value)}
-            />
-            <input 
-                type="password" 
-                placeholder="Enter your password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
+        <div className="login-page">
+            <div className="login-card">
+                <img className="login-logo" src={nxLogo} alt="Nippon Express" />
 
-            <button onClick={handleSubmit}>Login</button>
-            
-            {message && <p className="message">{message}</p>}
+                <input 
+                    type="text" 
+                    placeholder="Enter email address" 
+                    value={employeeId}
+                    onChange={(e) => setEmployeeId(e.target.value)}
+                />
+                <input 
+                    type="password" 
+                    placeholder="Enter your password" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+
+                <button onClick={handleSubmit}>Login</button>
+                
+                {message && <p className="message">{message}</p>}
+            </div>
         </div>
     );
 }

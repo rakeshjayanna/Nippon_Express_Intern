@@ -75,7 +75,7 @@ function EmployeeDashboard() {
                         <div className="card-icon">📧</div>
                         <div className="card-content">
                             <h3>Email</h3>
-                            <p className="card-value">{userData.email}</p>
+                            <p className="card-value email-value">{userData.email}</p>
                         </div>
                     </div>
 

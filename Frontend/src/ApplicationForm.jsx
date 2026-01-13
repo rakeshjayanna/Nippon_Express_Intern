@@ -721,7 +721,7 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
 
                 <Field label="Employee Type" required error={stepErrors.employeeType}>
                     <div className="af-choice-row" role="radiogroup" aria-label="Employee Type">
-                        {['Permanent', 'Probation', 'New', 'Change'].map(opt => (
+                        {['Permanent', 'Probation'].map(opt => (
                             <label key={opt} className={`af-choice ${formData.employeeType === opt ? 'is-on' : ''}`}>
                                 <input type="radio" name="employeeType" value={opt} checked={formData.employeeType === opt} onChange={handleChange} />
                                 <span>{opt}</span>

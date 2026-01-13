@@ -5,6 +5,28 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* Nippon Express palette */
+  --nx-purple: #2d135f;
+  --nx-purple-700: #220e48;
+  --nx-purple-rgb: 45, 19, 95;
+
+  --nx-green: #7ab800;
+  --nx-green-700: #5c8a00;
+  --nx-green-rgb: 122, 184, 0;
+
+  /* Theme primitives */
+  --nx-bg: #fafafa;
+  --nx-surface: #ffffff;
+  --nx-border: #e0e0e0;
+  --nx-text: #111;
+  --nx-muted: #666;
+
+  /* App-wide accent (used by forms, focus rings, etc.) */
+  --nx-accent: var(--nx-green);
+  --nx-accent-rgb: var(--nx-green-rgb);
+}
+
 html, body {
   width: 100%;
   min-height: 100vh;
@@ -19,8 +41,8 @@ html, body {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-  background-color: #fafafa;
-  color: #333;
+  background-color: var(--nx-bg);
+  color: var(--nx-text);
 }
 
 /* Scrollbar Styling */
@@ -38,5 +60,5 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #666;
+  background: var(--nx-muted);
 }
