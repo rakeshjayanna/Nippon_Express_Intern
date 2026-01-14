@@ -3,14 +3,13 @@ package backend.login.backend.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(
-    name = "application_forms",
-    indexes = {
-        @Index(name = "idx_application_forms_employee_code_submitted_at", columnList = "employee_code, submitted_at"),
-        @Index(name = "idx_application_forms_status_submitted_at", columnList = "status, submitted_at")
-    }
-)
+/**
+ * LEGACY MODEL ONLY (no longer a JPA entity).
+ *
+ * The project now persists submitted forms in application_form_submissions (JSON payload) to avoid
+ * MySQL/InnoDB row-size limits for the old wide table.
+ */
+@MappedSuperclass
 public class ApplicationForm {
     
     @Id

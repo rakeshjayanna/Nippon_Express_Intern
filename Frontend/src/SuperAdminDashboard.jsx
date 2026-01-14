@@ -1,9 +1,11 @@
 import './styles/dashboard.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ManageApplications from './ManageApplications';
 
 function SuperAdminDashboard() {
     const [userData, setUserData] = useState(null);
+    const [showApplications, setShowApplications] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -13,7 +15,7 @@ function SuperAdminDashboard() {
             return;
         }
         const data = JSON.parse(storedData);
-        if (data.role !== 'SUPERADMIN') {
+        if (data.role !== 'SUPERADMIN' && data.role !== 'ADMIN') {
             navigate('/login');
             return;
         }
@@ -27,6 +29,15 @@ function SuperAdminDashboard() {
 
     if (!userData) {
         return <div>Loading...</div>;
+    }
+
+    if (showApplications) {
+        return (
+            <ManageApplications
+                userEmail={userData.email}
+                onClose={() => setShowApplications(false)}
+            />
+        );
     }
 
     return (
@@ -145,6 +156,10 @@ function SuperAdminDashboard() {
                 <div className="quick-actions">
                     <h2>⚡ Administrative Actions</h2>
                     <div className="actions-grid admin-actions">
+                        <button className="action-btn admin-btn" onClick={() => setShowApplications(true)}>
+                            <span className="action-icon">✅</span>
+                            <span>Approve / Reject Applications</span>
+                        </button>
                         <button className="action-btn admin-btn">
                             <span className="action-icon">👥</span>
                             <span>Manage Users</span>

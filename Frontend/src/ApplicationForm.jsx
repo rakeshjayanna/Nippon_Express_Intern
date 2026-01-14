@@ -387,12 +387,6 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // If the user hits Enter while on steps 0-2, treat it as "Next" (not final submit).
-        if (stepIndex < steps.length - 1) {
-            goToStep(stepIndex + 1);
-            return;
-        }
-
         const finalErrors = validateStep(3, formData);
         if (Object.keys(finalErrors).length > 0) {
             setStepErrors(finalErrors);
@@ -429,10 +423,15 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
             const data = await response.json();
 
             if (response.ok) {
-                setMessage({ type: 'success', text: 'Application submitted successfully!' });
-                setTimeout(() => {
-                    if (onClose) onClose();
-                }, 2000);
+                try {
+                    localStorage.removeItem(getDraftStorageKey(userEmail));
+                    setDraftInfo({ status: 'cleared', savedAt: null });
+                } catch {
+                    // ignore
+                }
+
+                const idText = data?.formId ? ` (Form ID: ${data.formId})` : '';
+                setMessage({ type: 'success', text: `Submitted successfully (Status: PENDING)!${idText}` });
             } else {
                 setMessage({ type: 'error', text: data.error || 'Failed to submit application' });
             }
@@ -457,7 +456,7 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
         if (empCode === lastLookupCodeRef.current) return;
         try {
             setIsLookupLoading(true);
-            const res = await fetch(`http://localhost:8080/api/application-form/employee/${encodeURIComponent(empCode)}/latest`, {
+            const res = await fetch(`http://localhost:8080/api/users/by-code/${encodeURIComponent(empCode)}`, {
                 headers: { 'X-User-Email': userEmail }
             });
             if (res.ok) {
@@ -1297,14 +1296,18 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
                 ) : null}
 
                 <form
-                    onSubmit={handleSubmit}
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        // ONLY submit on final step when Submit button is clicked
+                        if (stepIndex === steps.length - 1) {
+                            handleSubmit(e);
+                        }
+                    }}
                     onKeyDown={(e) => {
-                        // Avoid accidental submit/jump when pressing Enter in inputs.
-                        if (e.key !== 'Enter') return;
-                        const tag = (e.target?.tagName || '').toUpperCase();
-                        if (tag === 'TEXTAREA') return;
-                        if (stepIndex < steps.length - 1) {
+                        // Block ALL Enter key presses - only button clicks allowed
+                        if (e.key === 'Enter') {
                             e.preventDefault();
+                            e.stopPropagation();
                         }
                     }}
                     className="af-card"

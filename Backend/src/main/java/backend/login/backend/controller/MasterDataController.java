@@ -7,9 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+@SuppressWarnings("null")
 @RestController
 @RequestMapping("/api/master-data")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
@@ -68,7 +69,7 @@ public class MasterDataController {
             if (user == null || !user.getRole().equals("HR")) {
                 return ResponseEntity.status(403).body(Map.of("error", "Access denied. HR role required."));
             }
-            MasterBranch saved = masterBranchRepository.save(branch);
+            MasterBranch saved = masterBranchRepository.save(Objects.requireNonNull(branch));
             return ResponseEntity.ok(saved);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
@@ -88,7 +89,7 @@ public class MasterDataController {
             if (user == null || !user.getRole().equals("HR")) {
                 return ResponseEntity.status(403).body(Map.of("error", "Access denied. HR role required."));
             }
-            MasterDepartment saved = masterDepartmentRepository.save(department);
+            MasterDepartment saved = masterDepartmentRepository.save(Objects.requireNonNull(department));
             return ResponseEntity.ok(saved);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
@@ -108,7 +109,7 @@ public class MasterDataController {
             if (user == null || !user.getRole().equals("HR")) {
                 return ResponseEntity.status(403).body(Map.of("error", "Access denied. HR role required."));
             }
-            MasterReportingOfficer saved = masterReportingOfficerRepository.save(officer);
+            MasterReportingOfficer saved = masterReportingOfficerRepository.save(Objects.requireNonNull(officer));
             return ResponseEntity.ok(saved);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
@@ -128,7 +129,7 @@ public class MasterDataController {
             if (user == null || !user.getRole().equals("HR")) {
                 return ResponseEntity.status(403).body(Map.of("error", "Access denied. HR role required."));
             }
-            MasterCompanyCode saved = masterCompanyCodeRepository.save(companyCode);
+            MasterCompanyCode saved = masterCompanyCodeRepository.save(Objects.requireNonNull(companyCode));
             return ResponseEntity.ok(saved);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
@@ -148,7 +149,7 @@ public class MasterDataController {
             if (user == null || !user.getRole().equals("HR")) {
                 return ResponseEntity.status(403).body(Map.of("error", "Access denied. HR role required."));
             }
-            MasterCostCenter saved = masterCostCenterRepository.save(costCenter);
+            MasterCostCenter saved = masterCostCenterRepository.save(Objects.requireNonNull(costCenter));
             return ResponseEntity.ok(saved);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));

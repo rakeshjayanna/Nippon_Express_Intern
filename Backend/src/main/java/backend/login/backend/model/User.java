@@ -19,6 +19,15 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    @Column(name = "employee_code", unique = true)
+    private String employeeCode;
+
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name = "designation")
+    private String designation;
+
     public int getId() {
         return id;
     }
@@ -49,5 +58,29 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getEmployeeCode() {
+        return employeeCode;
+    }
+
+    public void setEmployeeCode(String employeeCode) {
+        this.employeeCode = employeeCode;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
     }
 }

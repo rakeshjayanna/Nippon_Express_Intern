@@ -2,10 +2,12 @@ import './styles/dashboard.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ApplicationForm from './ApplicationForm';
+import ViewApplication from './ViewApplication';
 
 function EmployeeDashboard() {
     const [userData, setUserData] = useState(null);
     const [showApplicationForm, setShowApplicationForm] = useState(false);
+    const [showViewApplication, setShowViewApplication] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,6 +40,16 @@ function EmployeeDashboard() {
                 userEmail={userData.email} 
                 userRole={userData.role}
                 onClose={() => setShowApplicationForm(false)}
+            />
+        );
+    }
+
+    // Employee view-only application screen
+    if (showViewApplication && userData.role === 'EMPLOYEE') {
+        return (
+            <ViewApplication
+                userEmail={userData.email}
+                onClose={() => setShowViewApplication(false)}
             />
         );
     }
@@ -150,6 +162,14 @@ function EmployeeDashboard() {
                                 <span>Application Form</span>
                             </button>
                         )}
+
+                        {userData.role === 'EMPLOYEE' && (
+                            <button className="action-btn primary" onClick={() => setShowViewApplication(true)}>
+                                <span className="action-icon">👁️</span>
+                                <span>View Application</span>
+                            </button>
+                        )}
+
                         <button className="action-btn">
                             <span className="action-icon">📊</span>
                             <span>View Reports</span>

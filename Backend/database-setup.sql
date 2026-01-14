@@ -227,6 +227,24 @@ CREATE TABLE IF NOT EXISTS application_forms (
 ) ENGINE=InnoDB;
 
 -- -----------------------
+-- Application Form Submissions (separate table for submitted forms)
+-- -----------------------
+CREATE TABLE IF NOT EXISTS application_form_submissions (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  employee_code VARCHAR(255) NOT NULL,
+  full_name VARCHAR(255) DEFAULT NULL,
+  status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+  submitted_at DATETIME(6) NOT NULL,
+  processed_at DATETIME(6) DEFAULT NULL,
+  processed_by VARCHAR(255) DEFAULT NULL,
+  processing_notes TEXT,
+  form_json LONGTEXT NOT NULL,
+  PRIMARY KEY (id),
+  KEY idx_app_form_sub_emp_submitted_at (employee_code, submitted_at),
+  KEY idx_app_form_sub_status_submitted_at (status, submitted_at)
+) ENGINE=InnoDB;
+
+-- -----------------------
 -- Optional: minimal starter data (uncomment if you want)
 -- -----------------------
 

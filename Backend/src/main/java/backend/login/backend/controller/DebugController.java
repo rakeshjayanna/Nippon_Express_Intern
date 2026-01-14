@@ -1,6 +1,6 @@
 package backend.login.backend.controller;
 
-import backend.login.backend.repository.ApplicationFormRepository;
+import backend.login.backend.repository.ApplicationFormSubmissionRepository;
 import backend.login.backend.repository.MasterBranchRepository;
 import backend.login.backend.repository.MasterCompanyCodeRepository;
 import backend.login.backend.repository.MasterCostCenterRepository;
@@ -25,7 +25,7 @@ public class DebugController {
     private final MasterReportingOfficerRepository masterReportingOfficerRepository;
     private final MasterCompanyCodeRepository masterCompanyCodeRepository;
     private final MasterCostCenterRepository masterCostCenterRepository;
-    private final ApplicationFormRepository applicationFormRepository;
+    private final ApplicationFormSubmissionRepository applicationFormSubmissionRepository;
 
     public DebugController(
             UserRepository userRepository,
@@ -34,7 +34,7 @@ public class DebugController {
             MasterReportingOfficerRepository masterReportingOfficerRepository,
             MasterCompanyCodeRepository masterCompanyCodeRepository,
             MasterCostCenterRepository masterCostCenterRepository,
-            ApplicationFormRepository applicationFormRepository
+            ApplicationFormSubmissionRepository applicationFormSubmissionRepository
     ) {
         this.userRepository = userRepository;
         this.masterBranchRepository = masterBranchRepository;
@@ -42,20 +42,18 @@ public class DebugController {
         this.masterReportingOfficerRepository = masterReportingOfficerRepository;
         this.masterCompanyCodeRepository = masterCompanyCodeRepository;
         this.masterCostCenterRepository = masterCostCenterRepository;
-        this.applicationFormRepository = applicationFormRepository;
+        this.applicationFormSubmissionRepository = applicationFormSubmissionRepository;
     }
 
     @GetMapping("/users")
     public List<Object> listUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(u -> {
-                    return new Object() {
-                        public final int id = u.getId();
-                        public final String email = u.getEmail();
-                        public final String role = u.getRole();
-                    };
-                })
+                .map(u -> Map.of(
+                        "id", u.getId(),
+                        "email", u.getEmail(),
+                        "role", u.getRole()
+                ))
                 .collect(Collectors.toList());
     }
 
@@ -68,7 +66,7 @@ public class DebugController {
                 "reportingOfficersActive", masterReportingOfficerRepository.findByActiveTrue().size(),
                 "companyCodesActive", masterCompanyCodeRepository.findByActiveTrue().size(),
                 "costCentersActive", masterCostCenterRepository.findByActiveTrue().size(),
-                "applicationForms", applicationFormRepository.count()
+                "applicationFormSubmissions", applicationFormSubmissionRepository.count()
         );
     }
 }

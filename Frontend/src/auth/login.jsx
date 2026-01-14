@@ -26,7 +26,12 @@ function Login(){
             
             // Normalize role (handle SUPER_ADMIN, SUPER-ADMIN, SUPERADMIN, etc.)
             const rawRole = (response.data.role || '').toString();
-            const normalizedRole = rawRole.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+            let normalizedRole = rawRole.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+
+            // Backend seed uses ADMIN; treat it as SUPERADMIN for UI routing.
+            if (normalizedRole === 'ADMIN') {
+                normalizedRole = 'SUPERADMIN';
+            }
 
             // Store user data in localStorage with normalized role
             const userData = {
