@@ -1,6 +1,9 @@
 import './styles/dashboard.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { authService } from './services/authService';
+import { ROUTES } from './utils/constants';
 import ApplicationForm from './ApplicationForm';
 import ViewApplication from './ViewApplication';
 
@@ -8,29 +11,31 @@ function EmployeeDashboard() {
     const [userData, setUserData] = useState(null);
     const [showApplicationForm, setShowApplicationForm] = useState(false);
     const [showViewApplication, setShowViewApplication] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedData = localStorage.getItem('userData');
-        if (!storedData) {
-            navigate('/login');
-            return;
-        }
-        const data = JSON.parse(storedData);
-        if (data.role !== 'EMPLOYEE' && data.role !== 'HR') {
-            navigate('/login');
+        const data = authService.getUserData();
+        if (!data || (data.role !== 'EMPLOYEE' && data.role !== 'HR')) {
+            navigate(ROUTES.LOGIN);
             return;
         }
         setUserData(data);
+        setIsLoading(false);
     }, [navigate]);
 
     const handleLogout = () => {
-        localStorage.removeItem('userData');
-        navigate('/login');
+        authService.logout();
+        toast.info("Logged out successfully");
+        navigate(ROUTES.LOGIN);
     };
 
-    if (!userData) {
-        return <div>Loading...</div>;
+    if (isLoading || !userData) {
+        return (
+            <div className="dashboard-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <div>Loading...</div>
+            </div>
+        );
     }
 
     // If HR user is viewing the form, show it

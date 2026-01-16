@@ -2,7 +2,12 @@ package backend.login.backend.controller;
 
 import backend.login.backend.model.User;
 import backend.login.backend.repository.UserRepository;
+import backend.login.backend.util.JwtUtil;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -14,33 +19,52 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserRepository userRepository) {
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody LoginRequest request) {
+        logger.info("Login attempt for email: {}", request.getEmail());
 
-        Optional<User> user = userRepository.findByEmailAndPassword(
-                request.getEmail(),
-                request.getPassword()
-        );
+        Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
 
         Map<String, Object> response = new HashMap<>();
 
-        if (user.isPresent()) {
-            User foundUser = user.get();
-            response.put("success", true);
-            response.put("employeeId", foundUser.getId());
-            response.put("email", foundUser.getEmail());
-            response.put("role", foundUser.getRole());
-            return ResponseEntity.ok(response);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            
+            // Verify password using BCrypt
+            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+                // Generate JWT token
+                String token = jwtUtil.generateToken(user.getEmail(), user.getRole(), user.getId());
+                
+                response.put("success", true);
+                response.put("token", token);
+                response.put("employeeId", user.getId());
+                response.put("email", user.getEmail());
+                response.put("role", user.getRole());
+                response.put("employeeCode", user.getEmployeeCode());
+                response.put("fullName", user.getFullName());
+                
+                logger.info("Login successful for email: {}", request.getEmail());
+                return ResponseEntity.ok(response);
+            } else {
+                logger.warn("Invalid password for email: {}", request.getEmail());
+            }
+        } else {
+            logger.warn("User not found for email: {}", request.getEmail());
         }
 
         response.put("success", false);
-        response.put("message", "Invalid credentials");
+        response.put("message", "Invalid email or password");
         return ResponseEntity.status(401).body(response);
     }
 

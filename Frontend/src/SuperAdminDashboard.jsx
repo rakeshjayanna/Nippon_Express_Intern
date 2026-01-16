@@ -1,34 +1,40 @@
 import './styles/dashboard.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { authService } from './services/authService';
+import { ROUTES } from './utils/constants';
 import ManageApplications from './ManageApplications';
 
 function SuperAdminDashboard() {
     const [userData, setUserData] = useState(null);
     const [showApplications, setShowApplications] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedData = localStorage.getItem('userData');
-        if (!storedData) {
-            navigate('/login');
-            return;
-        }
-        const data = JSON.parse(storedData);
-        if (data.role !== 'SUPERADMIN' && data.role !== 'ADMIN') {
-            navigate('/login');
+        const data = authService.getUserData();
+        const normalizedRole = (data?.role || '').toString().replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        if (!data || (normalizedRole !== 'SUPERADMIN' && normalizedRole !== 'ADMIN')) {
+            navigate(ROUTES.LOGIN);
             return;
         }
         setUserData(data);
+        setIsLoading(false);
     }, [navigate]);
 
     const handleLogout = () => {
-        localStorage.removeItem('userData');
-        navigate('/login');
+        authService.logout();
+        toast.info("Logged out successfully");
+        navigate(ROUTES.LOGIN);
     };
 
-    if (!userData) {
-        return <div>Loading...</div>;
+    if (isLoading || !userData) {
+        return (
+            <div className="dashboard-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <div>Loading...</div>
+            </div>
+        );
     }
 
     if (showApplications) {

@@ -6,8 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
 import java.util.Locale;
 
 @Configuration
@@ -24,18 +24,19 @@ public class DataSeeder {
             MasterDepartmentRepository masterDepartmentRepository,
             MasterReportingOfficerRepository masterReportingOfficerRepository,
             MasterCompanyCodeRepository masterCompanyCodeRepository,
-            MasterCostCenterRepository masterCostCenterRepository
+            MasterCostCenterRepository masterCostCenterRepository,
+            PasswordEncoder passwordEncoder
     ) {
         return args -> {
-            // Users (login)
-            ensureUser(userRepository, "hr@nipponexpress.com", "hr123", "HR");
-            ensureUser(userRepository, "employee@nipponexpress.com", "employee123", "EMPLOYEE");
-            ensureUser(userRepository, "admin@nipponexpress.com", "admin123", "ADMIN");
+            // Users (login) - passwords will be hashed
+            ensureUser(userRepository, passwordEncoder, "hr@nipponexpress.com", "hr123", "HR");
+            ensureUser(userRepository, passwordEncoder, "employee@nipponexpress.com", "employee123", "EMPLOYEE");
+            ensureUser(userRepository, passwordEncoder, "admin@nipponexpress.com", "admin123", "ADMIN");
 
             // Minimum 20 users each (HR / EMPLOYEE / ADMIN)
-            ensureUsersForRole(userRepository, "HR", "hr", "hr123");
-            ensureUsersForRole(userRepository, "EMPLOYEE", "employee", "employee123");
-            ensureUsersForRole(userRepository, "ADMIN", "admin", "admin123");
+            ensureUsersForRole(userRepository, passwordEncoder, "HR", "hr", "hr123");
+            ensureUsersForRole(userRepository, passwordEncoder, "EMPLOYEE", "employee", "employee123");
+            ensureUsersForRole(userRepository, passwordEncoder, "ADMIN", "admin", "admin123");
 
             // Master data
             ensureMasterBranches(masterBranchRepository);
@@ -46,21 +47,21 @@ public class DataSeeder {
         };
     }
 
-    private static void ensureUser(UserRepository userRepository, String email, String password, String role) {
+    private static void ensureUser(UserRepository userRepository, PasswordEncoder passwordEncoder, String email, String password, String role) {
         userRepository.findByEmail(email).orElseGet(() -> {
             User u = new User();
             u.setEmail(email);
-            u.setPassword(password);
+            u.setPassword(passwordEncoder.encode(password)); // Hash password
             u.setRole(role);
             return userRepository.save(u);
         });
     }
 
-    private static void ensureEmployeeUser(UserRepository userRepository, String email, String password, String employeeCode, String fullName, String designation) {
+    private static void ensureEmployeeUser(UserRepository userRepository, PasswordEncoder passwordEncoder, String email, String password, String employeeCode, String fullName, String designation) {
         User user = userRepository.findByEmail(email).orElseGet(() -> {
             User u = new User();
             u.setEmail(email);
-            u.setPassword(password);
+            u.setPassword(passwordEncoder.encode(password)); // Hash password
             u.setRole("EMPLOYEE");
             return userRepository.save(u);
         });
@@ -84,16 +85,16 @@ public class DataSeeder {
         }
     }
 
-    private static void ensureUsersForRole(UserRepository userRepository, String role, String emailPrefix, String password) {
+    private static void ensureUsersForRole(UserRepository userRepository, PasswordEncoder passwordEncoder, String role, String emailPrefix, String password) {
         for (int i = 1; i <= MIN_USERS_PER_ROLE; i++) {
             String email = String.format(Locale.ROOT, "%s%02d@nipponexpress.com", emailPrefix, i);
             if ("EMPLOYEE".equalsIgnoreCase(role)) {
                 String employeeCode = String.format(Locale.ROOT, "EMP%03d", i);
                 String fullName = String.format(Locale.ROOT, "Employee %02d", i);
                 String designation = (i % 2 == 0) ? "Associate" : "Executive";
-                ensureEmployeeUser(userRepository, email, password, employeeCode, fullName, designation);
+                ensureEmployeeUser(userRepository, passwordEncoder, email, password, employeeCode, fullName, designation);
             } else {
-                ensureUser(userRepository, email, password, role);
+                ensureUser(userRepository, passwordEncoder, email, password, role);
             }
         }
     }

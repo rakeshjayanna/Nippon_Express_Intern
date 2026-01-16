@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-LoginBackendApplication<login-backend>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "backend.login.backend.LoginBackendApplication",
+            "projectName": "login-backend",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
