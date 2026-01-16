@@ -1,144 +1,261 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.login-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(320px, 1.2fr) minmax(360px, 0.9fr);
+  gap: 2rem;
+  padding: 3rem clamp(1.5rem, 4vw, 4rem);
+  align-items: stretch;
+  color: var(--nx-text);
 }
 
-.login-page {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 12px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-  color: var(--nx-text);
-
-  background-image:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.35)),
+.login-hero {
+  position: relative;
+  border-radius: var(--nx-radius-lg);
+  background:
+    linear-gradient(160deg, rgba(11, 42, 74, 0.92), rgba(11, 42, 74, 0.65)),
     url('../assets/aeroplane.jpg');
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-}
-
-.login-card {
-  width: 100%;
-  max-width: 420px;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(45, 19, 95, 0.14);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: clamp(2rem, 4vw, 3rem);
+  color: #f7f9ff;
+  box-shadow: var(--nx-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2.5rem;
   overflow: hidden;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
 }
 
-/* Header with company branding */
-.login-card::before {
+.login-hero::after {
   content: '';
-  display: block;
-  height: 4px;
-  background: linear-gradient(90deg, var(--nx-green), var(--nx-purple));
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(600px 300px at 10% 10%, rgba(0, 179, 164, 0.22), transparent 60%);
+  pointer-events: none;
+}
+
+.login-hero-brand {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
 }
 
 .login-logo {
-  display: block;
-  width: min(280px, 78%);
+  width: clamp(180px, 22vw, 240px);
   height: auto;
-  margin: 28px auto 10px auto;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.25));
 }
 
-.login-card::after {
-  content: 'Logistics & Express Delivery';
-  display: block;
-  text-align: center;
-  font-size: 12px;
-  color: var(--nx-muted);
-  margin: 0 0 26px 0;
-  font-weight: 400;
-  letter-spacing: 0.5px;
+.login-hero-pill {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
-.login-card input {
-  width: 85%;
-  padding: 12px 14px;
-  border: 1px solid var(--nx-border);
-  border-radius: 4px;
-  box-sizing: border-box;
-  display: block;
-  margin: 16px auto 0 auto;
+.login-hero h1 {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  margin: 0.5rem 0 0.8rem;
+  letter-spacing: -0.02em;
+}
+
+.login-hero p {
+  position: relative;
+  z-index: 1;
+  max-width: 520px;
   font-size: 1rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: rgba(255, 255, 255, 0.85);
-  color: var(--nx-text);
+  line-height: 1.6;
+  color: rgba(247, 249, 255, 0.85);
 }
 
-.login-card input:focus {
-  outline: none;
-  border-color: var(--nx-accent);
-  box-shadow: 0 0 0 3px rgba(var(--nx-accent-rgb), 0.18);
-  background-color: rgba(255, 255, 255, 0.92);
+.login-hero-metrics {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
 }
 
-.login-card input::placeholder {
-  color: #999;
+.metric-card {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: var(--nx-radius-md);
+  padding: 1rem 1.1rem;
+  backdrop-filter: blur(8px);
 }
 
-.login-card button {
-  width: 85%;
-  padding: 14px;
-  background: var(--nx-purple);
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.metric-label {
   display: block;
-  margin: 24px auto 18px auto;
-  font-weight: 500;
-  font-size: 0.95rem;
-  letter-spacing: 0.5px;
-  transition: background-color 0.2s ease;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: 0.12em;
+  opacity: 0.75;
 }
 
-.login-card button:hover {
-  background: var(--nx-purple-700);
+.metric-value {
+  display: block;
+  font-size: 1.4rem;
+  margin: 0.4rem 0 0.2rem;
 }
 
-.login-card button:active {
-  background: var(--nx-purple);
+.metric-note {
+  font-size: 0.8rem;
+  opacity: 0.7;
 }
 
-.message {
-  width: 85%;
-  margin: 0 auto 18px auto;
-  padding: 12px 14px;
-  font-weight: 400;
-  font-size: 0.9rem;
-  background-color: #f5f5f5;
-  color: var(--nx-text);
+.login-hero-footer {
+  position: relative;
+  z-index: 1;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.login-hero-divider {
+  opacity: 0.6;
+}
+
+.login-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.login-card {
+  background: var(--nx-surface);
+  border-radius: var(--nx-radius-lg);
+  box-shadow: var(--nx-shadow-md);
+  padding: clamp(2rem, 3vw, 2.8rem);
   border: 1px solid var(--nx-border);
-  border-left: 4px solid var(--nx-purple);
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-  .login-page {
-    padding: 16px 10px;
+.login-card-header h2 {
+  margin: 0.5rem 0 0.4rem;
+  font-size: 1.6rem;
+  color: var(--nx-primary);
+}
+
+.login-card-header p {
+  margin: 0;
+  color: var(--nx-muted);
+  font-size: 0.95rem;
+}
+
+.login-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(0, 179, 164, 0.12);
+  color: var(--nx-accent-700);
+  border: 1px solid rgba(0, 179, 164, 0.3);
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 1.2rem;
+}
+
+.login-field label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--nx-muted);
+}
+
+.login-field input {
+  border: 1px solid var(--nx-border);
+  border-radius: var(--nx-radius-sm);
+  padding: 0.85rem 1rem;
+  font-size: 0.98rem;
+  background: var(--nx-surface-elevated);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-field input:focus {
+  border-color: var(--nx-accent);
+  box-shadow: var(--nx-glow);
+}
+
+.login-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 1.8rem;
+}
+
+.login-primary {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border-radius: var(--nx-radius-sm);
+  border: none;
+  background: var(--nx-gradient);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: var(--nx-shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.login-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--nx-shadow-md);
+}
+
+.login-help {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--nx-muted);
+}
+
+.login-help a {
+  color: var(--nx-primary);
+  font-weight: 600;
+}
+
+.login-panel-note {
+  font-size: 0.78rem;
+  color: var(--nx-muted-2);
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .login-shell {
+    grid-template-columns: 1fr;
   }
 
-  .login-logo {
-    width: min(240px, 82%);
-    margin-top: 22px;
+  .login-hero {
+    min-height: 380px;
+  }
+}
+
+@media (max-width: 640px) {
+  .login-shell {
+    padding: 2rem 1.2rem;
   }
 
-  .login-card input,
-  .login-card button,
-  .message {
-    width: 90%;
+  .login-hero {
+    padding: 2rem 1.5rem;
   }
 }

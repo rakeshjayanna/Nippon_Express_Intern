@@ -67,7 +67,7 @@ function Login(){
     }
 };
 
-const handleKeyPress = (e) => {
+const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
         handleSubmit();
     }
@@ -75,36 +75,93 @@ const handleKeyPress = (e) => {
 
 
     return(
-        <div className="login-page">
-            <div className="login-card">
-                <img className="login-logo" src={nxLogo} alt="Nippon Express" />
+        <div className="login-shell">
+            <section className="login-hero">
+                <div className="login-hero-brand">
+                    <img className="login-logo" src={nxLogo} alt="Nippon Express" />
+                    <span className="login-hero-pill">Enterprise Access</span>
+                </div>
+                <h1>NX Identity & Access Hub</h1>
+                <p>Secure, audited access to employee onboarding, approvals, and operational tooling.</p>
 
-                <form onSubmit={handleSubmit}>
-                    <input 
-                        type="email" 
-                        placeholder="Enter email address" 
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        disabled={isLoading}
-                        required
-                        autoFocus
-                    />
-                    <input 
-                        type="password" 
-                        placeholder="Enter your password" 
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        disabled={isLoading}
-                        required
-                    />
+                <div className="login-hero-metrics">
+                    <div className="metric-card">
+                        <span className="metric-label">Uptime</span>
+                        <strong className="metric-value">99.99%</strong>
+                        <span className="metric-note">Global availability</span>
+                    </div>
+                    <div className="metric-card">
+                        <span className="metric-label">Compliance</span>
+                        <strong className="metric-value">ISO 27001</strong>
+                        <span className="metric-note">Policy aligned</span>
+                    </div>
+                    <div className="metric-card">
+                        <span className="metric-label">Sessions</span>
+                        <strong className="metric-value">24/7</strong>
+                        <span className="metric-note">Continuous access</span>
+                    </div>
+                </div>
 
-                    <button type="submit" disabled={isLoading}>
-                        {isLoading ? "Logging in..." : "Login"}
-                    </button>
-                </form>
-            </div>
+                <div className="login-hero-footer">
+                    <span>Last audit sync: Today • 09:30 UTC</span>
+                    <span className="login-hero-divider">•</span>
+                    <span>Risk posture: Low</span>
+                </div>
+            </section>
+
+            <section className="login-panel">
+                <div className="login-card">
+                    <div className="login-card-header">
+                        <span className="login-badge">Secure Sign-In</span>
+                        <h2>Sign in to continue</h2>
+                        <p>Use your corporate credentials to access the NX portal.</p>
+                    </div>
+
+                    <form onSubmit={handleSubmit}>
+                        <div className="login-field">
+                            <label htmlFor="email">Corporate Email</label>
+                            <input 
+                                id="email"
+                                type="email" 
+                                placeholder="name@nipponexpress.com" 
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                disabled={isLoading}
+                                required
+                                autoFocus
+                            />
+                        </div>
+                        <div className="login-field">
+                            <label htmlFor="password">Password</label>
+                            <input 
+                                id="password"
+                                type="password" 
+                                placeholder="Enter your secure password" 
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                disabled={isLoading}
+                                required
+                            />
+                        </div>
+
+                        <div className="login-actions">
+                            <button className="login-primary" type="submit" disabled={isLoading}>
+                                {isLoading ? "Authenticating..." : "Sign In"}
+                            </button>
+                            <div className="login-help">
+                                <span>Need access?</span>
+                                <a href="#" onClick={(e) => e.preventDefault()}>Contact IT Support</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div className="login-panel-note">
+                    By signing in you acknowledge monitoring, audit logging, and enterprise security controls.
+                </div>
+            </section>
         </div>
     );
 }

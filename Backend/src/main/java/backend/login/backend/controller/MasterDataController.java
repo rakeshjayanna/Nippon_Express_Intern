@@ -1,19 +1,34 @@
 package backend.login.backend.controller;
 
-import backend.login.backend.model.*;
-import backend.login.backend.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import backend.login.backend.model.MasterBranch;
+import backend.login.backend.model.MasterCompanyCode;
+import backend.login.backend.model.MasterCostCenter;
+import backend.login.backend.model.MasterDepartment;
+import backend.login.backend.model.MasterReportingOfficer;
+import backend.login.backend.model.User;
+import backend.login.backend.repository.MasterBranchRepository;
+import backend.login.backend.repository.MasterCompanyCodeRepository;
+import backend.login.backend.repository.MasterCostCenterRepository;
+import backend.login.backend.repository.MasterDepartmentRepository;
+import backend.login.backend.repository.MasterReportingOfficerRepository;
+import backend.login.backend.repository.UserRepository;
+
 @SuppressWarnings("null")
 @RestController
 @RequestMapping("/api/master-data")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class MasterDataController {
 
     @Autowired

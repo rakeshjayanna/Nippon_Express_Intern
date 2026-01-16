@@ -6,25 +6,34 @@
 }
 
 :root {
-  /* Nippon Express palette */
-  --nx-purple: #2d135f;
-  --nx-purple-700: #220e48;
-  --nx-purple-rgb: 45, 19, 95;
+  --nx-primary: #0b2a4a;
+  --nx-primary-600: #0f3a63;
+  --nx-primary-700: #08223b;
+  --nx-accent: #00b3a4;
+  --nx-accent-600: #009688;
+  --nx-accent-700: #007f73;
+  --nx-accent-rgb: 0, 179, 164;
+  --nx-brand: #4f46e5;
 
-  --nx-green: #7ab800;
-  --nx-green-700: #5c8a00;
-  --nx-green-rgb: 122, 184, 0;
-
-  /* Theme primitives */
-  --nx-bg: #fafafa;
+  --nx-bg: #f5f7fb;
   --nx-surface: #ffffff;
-  --nx-border: #e0e0e0;
-  --nx-text: #111;
-  --nx-muted: #666;
+  --nx-surface-elevated: #f9fbff;
+  --nx-border: #e3e7f0;
+  --nx-text: #0b1220;
+  --nx-muted: #5c667b;
+  --nx-muted-2: #8a94a6;
 
-  /* App-wide accent (used by forms, focus rings, etc.) */
-  --nx-accent: var(--nx-green);
-  --nx-accent-rgb: var(--nx-green-rgb);
+  --nx-radius-sm: 8px;
+  --nx-radius-md: 14px;
+  --nx-radius-lg: 20px;
+
+  --nx-shadow-xs: 0 2px 8px rgba(11, 18, 32, 0.06);
+  --nx-shadow-sm: 0 6px 18px rgba(11, 18, 32, 0.10);
+  --nx-shadow-md: 0 16px 36px rgba(11, 18, 32, 0.14);
+  --nx-shadow-lg: 0 28px 60px rgba(11, 18, 32, 0.18);
+
+  --nx-gradient: linear-gradient(135deg, #0b2a4a 0%, #1a4b7a 45%, #00b3a4 100%);
+  --nx-glow: 0 0 0 4px rgba(var(--nx-accent-rgb), 0.18);
 }
 
 html, body {
@@ -40,9 +49,30 @@ html, body {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-  background-color: var(--nx-bg);
+  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  background: radial-gradient(1200px 600px at 10% -10%, rgba(79, 70, 229, 0.12), transparent 65%),
+    radial-gradient(900px 500px at 90% -20%, rgba(0, 179, 164, 0.14), transparent 60%),
+    var(--nx-bg);
   color: var(--nx-text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--nx-glow);
 }
 
 /* Scrollbar Styling */
@@ -51,14 +81,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #eef1f7;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #999;
-  border-radius: 5px;
+  background: #b8c0d0;
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--nx-muted);
+  background: #9aa4b6;
 }

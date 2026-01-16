@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './styles/dashboard.css';
+import LoadingSpinner from './components/LoadingSpinner';
 
 function formatDateTime(value) {
     if (!value) return '';
@@ -81,7 +82,8 @@ function ManageApplications({ userEmail, onClose }) {
         <div className="dashboard-container">
             <nav className="dashboard-nav">
                 <div className="nav-brand">
-                    <h2>Nippon Express - Applications</h2>
+                    <h2>NX Approval Console</h2>
+                    <p>Application Governance</p>
                 </div>
                 <div className="nav-user">
                     <button onClick={onClose} className="logout-btn">Back</button>
@@ -110,7 +112,7 @@ function ManageApplications({ userEmail, onClose }) {
                 ) : null}
 
                 {isLoading ? (
-                    <div>Loading...</div>
+                    <LoadingSpinner message="Loading applications" />
                 ) : error ? null : forms.length === 0 ? (
                     <div className="permission-card denied">
                         <span className="permission-icon">✗</span>

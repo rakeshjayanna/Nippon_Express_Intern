@@ -6,6 +6,7 @@ import { authService } from './services/authService';
 import { ROUTES } from './utils/constants';
 import ApplicationForm from './ApplicationForm';
 import ViewApplication from './ViewApplication';
+import LoadingSpinner from './components/LoadingSpinner';
 
 function EmployeeDashboard() {
     const [userData, setUserData] = useState(null);
@@ -32,8 +33,8 @@ function EmployeeDashboard() {
 
     if (isLoading || !userData) {
         return (
-            <div className="dashboard-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <div>Loading...</div>
+            <div className="dashboard-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+                <LoadingSpinner message="Loading your workspace" />
             </div>
         );
     }
@@ -63,7 +64,8 @@ function EmployeeDashboard() {
         <div className="dashboard-container">
             <nav className="dashboard-nav">
                 <div className="nav-brand">
-                    <h2>Nippon Express</h2>
+                    <h2>NX Workspace</h2>
+                    <p>Employee Services</p>
                 </div>
                 <div className="nav-user">
                     <span className={`user-role-badge ${userData.role === 'HR' ? 'hr' : 'employee'}`}>
@@ -74,97 +76,85 @@ function EmployeeDashboard() {
             </nav>
 
             <div className="dashboard-content">
-                <div className="welcome-section">
-                    <h1>Welcome, {userData.role === 'HR' ? 'HR' : 'Employee'}!</h1>
-                    <p className="subtitle">{userData.role === 'HR' ? 'HR Management Portal' : 'Employee Portal Dashboard'}</p>
-                </div>
-
-                <div className="info-cards">
-                    <div className="info-card">
-                        <div className="card-icon">👤</div>
-                        <div className="card-content">
-                            <h3>Employee ID</h3>
-                            <p className="card-value">{userData.employeeId}</p>
-                        </div>
+                <div className="dashboard-hero">
+                    <div>
+                        <h1 className="hero-title">Welcome, {userData.role === 'HR' ? 'HR' : 'Employee'}</h1>
+                        <p className="hero-subtitle">{userData.role === 'HR' ? 'HR operations workspace with elevated access.' : 'Employee workspace with guided self-service tools.'}</p>
                     </div>
-
-                    <div className="info-card">
-                        <div className="card-icon">📧</div>
-                        <div className="card-content">
-                            <h3>Email</h3>
-                            <p className="card-value email-value">{userData.email}</p>
-                        </div>
-                    </div>
-
-                    <div className="info-card">
-                        <div className="card-icon">🎭</div>
-                        <div className="card-content">
-                            <h3>Role</h3>
-                            <p className="card-value employee-text">{userData.role}</p>
-                        </div>
+                    <div className="hero-chips">
+                        <span className="hero-chip">Session Active</span>
+                        <span className="hero-chip">Policy: Standard</span>
+                        <span className="hero-chip">Region: APAC</span>
                     </div>
                 </div>
 
-                <div className="permissions-section">
-                    <h2>📋 Your Access Permissions</h2>
+                <div className="kpi-grid">
+                    <div className="kpi-card">
+                        <span className="kpi-label">Employee ID</span>
+                        <span className="kpi-value">{userData.employeeId}</span>
+                        <span className="kpi-trend">Verified identity</span>
+                    </div>
+                    <div className="kpi-card">
+                        <span className="kpi-label">Role</span>
+                        <span className="kpi-value">{userData.role}</span>
+                        <span className="kpi-trend">Access tier: Standard</span>
+                    </div>
+                    <div className="kpi-card">
+                        <span className="kpi-label">Email</span>
+                        <span className="kpi-value">{userData.email}</span>
+                        <span className="kpi-trend">SSO verified</span>
+                    </div>
+                    <div className="kpi-card">
+                        <span className="kpi-label">Last Login</span>
+                        <span className="kpi-value">{new Date().toLocaleDateString()}</span>
+                        <span className="kpi-trend">Device trusted</span>
+                    </div>
+                </div>
+
+                <div className="panel">
+                    <h2 className="panel-title">Access permissions</h2>
                     <div className="permissions-grid">
                         <div className="permission-card allowed">
                             <span className="permission-icon">✓</span>
                             <div className="permission-details">
-                                <h4>View Personal Information</h4>
-                                <p>Access your profile and personal details</p>
+                                <h4>Profile & Identity</h4>
+                                <p>View and manage personal details</p>
                             </div>
                         </div>
 
                         <div className="permission-card allowed">
                             <span className="permission-icon">✓</span>
                             <div className="permission-details">
-                                <h4>Submit Reports</h4>
-                                <p>Create and submit work reports</p>
+                                <h4>Operational Requests</h4>
+                                <p>Submit onboarding and service requests</p>
                             </div>
                         </div>
 
                         <div className="permission-card allowed">
                             <span className="permission-icon">✓</span>
                             <div className="permission-details">
-                                <h4>View Schedules</h4>
-                                <p>Check your work schedule and assignments</p>
-                            </div>
-                        </div>
-
-                        <div className="permission-card allowed">
-                            <span className="permission-icon">✓</span>
-                            <div className="permission-details">
-                                <h4>Request Leave</h4>
-                                <p>Submit leave and vacation requests</p>
+                                <h4>Scheduling</h4>
+                                <p>Review schedules and assignments</p>
                             </div>
                         </div>
 
                         <div className="permission-card denied">
                             <span className="permission-icon">✗</span>
                             <div className="permission-details">
-                                <h4>Manage Users</h4>
-                                <p>Admin-only feature</p>
-                            </div>
-                        </div>
-
-                        <div className="permission-card denied">
-                            <span className="permission-icon">✗</span>
-                            <div className="permission-details">
-                                <h4>System Configuration</h4>
+                                <h4>System Administration</h4>
                                 <p>Admin-only feature</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="quick-actions">
-                    <h2>⚡ Quick Actions</h2>
+                <div className="panel">
+                    <h2 className="panel-title">Quick actions</h2>
                     <div className="actions-grid">
                         {userData.role === 'HR' && (
                             <button className="action-btn primary" onClick={() => setShowApplicationForm(true)}>
                                 <span className="action-icon">📝</span>
-                                <span>Application Form</span>
+                                <span>Application Intake</span>
                             </button>
                         )}
 
@@ -177,11 +167,11 @@ function EmployeeDashboard() {
 
                         <button className="action-btn">
                             <span className="action-icon">📊</span>
-                            <span>View Reports</span>
+                            <span>Performance Reports</span>
                         </button>
                         <button className="action-btn">
                             <span className="action-icon">📅</span>
-                            <span>Check Schedule</span>
+                            <span>Schedule Center</span>
                         </button>
                         <button className="action-btn">
                             <span className="action-icon">✉️</span>
@@ -189,8 +179,35 @@ function EmployeeDashboard() {
                         </button>
                         <button className="action-btn">
                             <span className="action-icon">⚙️</span>
-                            <span>Settings</span>
+                            <span>Preferences</span>
                         </button>
+                    </div>
+                </div>
+
+                <div className="panel">
+                    <h2 className="panel-title">Recent activity</h2>
+                    <div className="activity-feed">
+                        <div className="activity-item">
+                            <span className="activity-dot" />
+                            <div>
+                                <strong>Identity verified</strong>
+                                <p className="subtitle">Multi-factor validation completed.</p>
+                            </div>
+                        </div>
+                        <div className="activity-item">
+                            <span className="activity-dot" />
+                            <div>
+                                <strong>Policy update</strong>
+                                <p className="subtitle">Access policy synced with global directory.</p>
+                            </div>
+                        </div>
+                        <div className="activity-item">
+                            <span className="activity-dot" />
+                            <div>
+                                <strong>Workspace ready</strong>
+                                <p className="subtitle">All modules are available for use.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

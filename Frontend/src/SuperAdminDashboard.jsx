@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { authService } from './services/authService';
 import { ROUTES } from './utils/constants';
 import ManageApplications from './ManageApplications';
+import LoadingSpinner from './components/LoadingSpinner';
 
 function SuperAdminDashboard() {
     const [userData, setUserData] = useState(null);
@@ -31,8 +32,8 @@ function SuperAdminDashboard() {
 
     if (isLoading || !userData) {
         return (
-            <div className="dashboard-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <div>Loading...</div>
+            <div className="dashboard-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+                <LoadingSpinner message="Loading admin console" />
             </div>
         );
     }
@@ -50,7 +51,8 @@ function SuperAdminDashboard() {
         <div className="dashboard-container">
             <nav className="dashboard-nav">
                 <div className="nav-brand">
-                    <h2>Nippon Express - Admin Portal</h2>
+                    <h2>NX Admin Control</h2>
+                    <p>Executive Operations</p>
                 </div>
                 <div className="nav-user">
                     <span className="user-role-badge superadmin">Super Admin</span>
@@ -59,108 +61,80 @@ function SuperAdminDashboard() {
             </nav>
 
             <div className="dashboard-content">
-                <div className="welcome-section">
-                    <h1>Welcome, Super Administrator!</h1>
-                    <p className="subtitle">Full System Access & Control</p>
-                </div>
-
-                <div className="info-cards">
-                    <div className="info-card admin-card">
-                        <div className="card-icon">👤</div>
-                        <div className="card-content">
-                            <h3>Admin ID</h3>
-                            <p className="card-value">{userData.employeeId}</p>
-                        </div>
+                <div className="dashboard-hero">
+                    <div>
+                        <h1 className="hero-title">Executive Admin Console</h1>
+                        <p className="hero-subtitle">Full system visibility, approvals, and security governance.</p>
                     </div>
-
-                    <div className="info-card admin-card">
-                        <div className="card-icon">📧</div>
-                        <div className="card-content">
-                            <h3>Email</h3>
-                            <p className="card-value email-value">{userData.email}</p>
-                        </div>
-                    </div>
-
-                    <div className="info-card admin-card">
-                        <div className="card-icon">🛡️</div>
-                        <div className="card-content">
-                            <h3>Role</h3>
-                            <p className="card-value superadmin-text">{userData.role}</p>
-                        </div>
+                    <div className="hero-chips">
+                        <span className="hero-chip">Privilege: Tier 0</span>
+                        <span className="hero-chip">Compliance: Active</span>
+                        <span className="hero-chip">Risk: Low</span>
                     </div>
                 </div>
 
-                <div className="permissions-section">
-                    <h2>🔐 Master Administrative Permissions</h2>
+                <div className="kpi-grid">
+                    <div className="kpi-card">
+                        <span className="kpi-label">Admin ID</span>
+                        <span className="kpi-value">{userData.employeeId}</span>
+                        <span className="kpi-trend">Root access verified</span>
+                    </div>
+                    <div className="kpi-card">
+                        <span className="kpi-label">Email</span>
+                        <span className="kpi-value">{userData.email}</span>
+                        <span className="kpi-trend">MFA enabled</span>
+                    </div>
+                    <div className="kpi-card">
+                        <span className="kpi-label">Role</span>
+                        <span className="kpi-value">{userData.role}</span>
+                        <span className="kpi-trend">System owner</span>
+                    </div>
+                    <div className="kpi-card">
+                        <span className="kpi-label">Security Score</span>
+                        <span className="kpi-value">A+</span>
+                        <span className="kpi-trend">All controls passing</span>
+                    </div>
+                </div>
+
+                <div className="panel">
+                    <h2 className="panel-title">Administrative permissions</h2>
                     <div className="permissions-grid">
-                        <div className="permission-card allowed admin-permission">
+                        <div className="permission-card allowed">
                             <span className="permission-icon">✓</span>
                             <div className="permission-details">
-                                <h4>User Management</h4>
-                                <p>Create, update, delete user accounts</p>
+                                <h4>User Lifecycle Management</h4>
+                                <p>Create, update, and deactivate user accounts.</p>
                             </div>
                         </div>
 
-                        <div className="permission-card allowed admin-permission">
+                        <div className="permission-card allowed">
                             <span className="permission-icon">✓</span>
                             <div className="permission-details">
-                                <h4>Role Assignment</h4>
-                                <p>Assign and modify user roles and permissions</p>
+                                <h4>Security Governance</h4>
+                                <p>Audit logs, policy updates, and access reviews.</p>
                             </div>
                         </div>
 
-                        <div className="permission-card allowed admin-permission">
+                        <div className="permission-card allowed">
                             <span className="permission-icon">✓</span>
                             <div className="permission-details">
                                 <h4>System Configuration</h4>
-                                <p>Modify system settings and configurations</p>
+                                <p>Manage integrations, APIs, and system health.</p>
                             </div>
                         </div>
 
-                        <div className="permission-card allowed admin-permission">
+                        <div className="permission-card allowed">
                             <span className="permission-icon">✓</span>
                             <div className="permission-details">
-                                <h4>Database Access</h4>
-                                <p>Full database read and write permissions</p>
-                            </div>
-                        </div>
-
-                        <div className="permission-card allowed admin-permission">
-                            <span className="permission-icon">✓</span>
-                            <div className="permission-details">
-                                <h4>Security Logs</h4>
-                                <p>View and manage security audit logs</p>
-                            </div>
-                        </div>
-
-                        <div className="permission-card allowed admin-permission">
-                            <span className="permission-icon">✓</span>
-                            <div className="permission-details">
-                                <h4>Report Generation</h4>
-                                <p>Generate and export all system reports</p>
-                            </div>
-                        </div>
-
-                        <div className="permission-card allowed admin-permission">
-                            <span className="permission-icon">✓</span>
-                            <div className="permission-details">
-                                <h4>Backup & Restore</h4>
-                                <p>Manage system backups and restoration</p>
-                            </div>
-                        </div>
-
-                        <div className="permission-card allowed admin-permission">
-                            <span className="permission-icon">✓</span>
-                            <div className="permission-details">
-                                <h4>API Management</h4>
-                                <p>Configure API endpoints and access controls</p>
+                                <h4>Data Governance</h4>
+                                <p>Database access and backup controls.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="quick-actions">
-                    <h2>⚡ Administrative Actions</h2>
+                <div className="panel">
+                    <h2 className="panel-title">Executive actions</h2>
                     <div className="actions-grid admin-actions">
                         <button className="action-btn admin-btn" onClick={() => setShowApplications(true)}>
                             <span className="action-icon">✅</span>
@@ -168,7 +142,7 @@ function SuperAdminDashboard() {
                         </button>
                         <button className="action-btn admin-btn">
                             <span className="action-icon">👥</span>
-                            <span>Manage Users</span>
+                            <span>User Governance</span>
                         </button>
                         <button className="action-btn admin-btn">
                             <span className="action-icon">📊</span>
@@ -176,20 +150,43 @@ function SuperAdminDashboard() {
                         </button>
                         <button className="action-btn admin-btn">
                             <span className="action-icon">🔒</span>
-                            <span>Security Settings</span>
+                            <span>Security Center</span>
                         </button>
                         <button className="action-btn admin-btn">
                             <span className="action-icon">🗄️</span>
-                            <span>Database Manager</span>
+                            <span>Data Manager</span>
                         </button>
                         <button className="action-btn admin-btn">
                             <span className="action-icon">📝</span>
                             <span>Audit Logs</span>
                         </button>
-                        <button className="action-btn admin-btn">
-                            <span className="action-icon">⚙️</span>
-                            <span>System Config</span>
-                        </button>
+                    </div>
+                </div>
+
+                <div className="panel">
+                    <h2 className="panel-title">Executive activity</h2>
+                    <div className="activity-feed">
+                        <div className="activity-item">
+                            <span className="activity-dot" />
+                            <div>
+                                <strong>Compliance snapshot generated</strong>
+                                <p className="subtitle">Monthly audit reports ready for export.</p>
+                            </div>
+                        </div>
+                        <div className="activity-item">
+                            <span className="activity-dot" />
+                            <div>
+                                <strong>New approvals pending</strong>
+                                <p className="subtitle">3 requests awaiting review.</p>
+                            </div>
+                        </div>
+                        <div className="activity-item">
+                            <span className="activity-dot" />
+                            <div>
+                                <strong>Policy sync completed</strong>
+                                <p className="subtitle">Global directory updated successfully.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
