@@ -275,19 +275,16 @@ public class ApplicationFormController {
             ApplicationFormSubmission form = applicationFormSubmissionRepository.findById(Long.valueOf(id))
                     .orElseThrow(() -> new RuntimeException("Form not found"));
 
-            if (normalizedStatus.equals("REJECTED")) {
-                @SuppressWarnings("null")
-                ApplicationFormSubmission toDelete = form;
-                applicationFormSubmissionRepository.delete(toDelete);
-                return ResponseEntity.ok(Map.of("message", "Form rejected and deleted successfully"));
-            }
-
             form.setStatus(normalizedStatus);
             form.setProcessedAt(LocalDateTime.now());
             form.setProcessedBy(userEmail);
             form.setProcessingNotes(statusUpdate.get("notes"));
 
             applicationFormSubmissionRepository.save(form);
+
+            if (normalizedStatus.equals("REJECTED")) {
+                return ResponseEntity.ok(Map.of("message", "Form rejected successfully"));
+            }
 
             return ResponseEntity.ok(Map.of("message", "Form status updated successfully"));
         } catch (Exception e) {

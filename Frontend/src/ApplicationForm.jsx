@@ -677,7 +677,7 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
                 <Field label="Branch" hint="Auto-filled from latest employee record">
                     <input className="af-input" type="text" value={formData.branch?.branchName || ''} placeholder="Auto-fetched" readOnly />
                 </Field>
-
++
                 <Field label="Department" hint="Auto-filled from latest employee record">
                     <input className="af-input" type="text" value={formData.department?.departmentName || ''} placeholder="Auto-fetched" readOnly />
                 </Field>
