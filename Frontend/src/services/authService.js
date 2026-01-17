@@ -13,6 +13,7 @@ export const authService = {
         role: response.data.role,
         employeeCode: response.data.employeeCode,
         fullName: response.data.fullName,
+        designation: response.data.designation,
       }));
     }
     return response.data;

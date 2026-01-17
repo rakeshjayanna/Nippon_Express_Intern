@@ -13,8 +13,32 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
   role VARCHAR(50) NOT NULL,
+  employee_code VARCHAR(255) DEFAULT NULL,
+  full_name VARCHAR(255) DEFAULT NULL,
+  designation VARCHAR(255) DEFAULT NULL,
+  branch_id BIGINT DEFAULT NULL,
+  sub_branch_id BIGINT DEFAULT NULL,
+  department_id BIGINT DEFAULT NULL,
+  reporting_officer_id BIGINT DEFAULT NULL,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_users_email (email)
+  UNIQUE KEY uk_users_email (email),
+  UNIQUE KEY uk_users_employee_code (employee_code),
+  KEY idx_users_branch_id (branch_id),
+  KEY idx_users_sub_branch_id (sub_branch_id),
+  KEY idx_users_department_id (department_id),
+  KEY idx_users_reporting_officer_id (reporting_officer_id),
+  CONSTRAINT fk_users_branch
+    FOREIGN KEY (branch_id) REFERENCES master_branch(id)
+    ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT fk_users_sub_branch
+    FOREIGN KEY (sub_branch_id) REFERENCES master_branch(id)
+    ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT fk_users_department
+    FOREIGN KEY (department_id) REFERENCES master_department(id)
+    ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT fk_users_reporting_officer
+    FOREIGN KEY (reporting_officer_id) REFERENCES master_reporting_officer(id)
+    ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 -- -----------------------
@@ -296,29 +320,47 @@ INSERT INTO master_cost_center (id, cost_center_code, cost_center_name, active) 
 ON DUPLICATE KEY UPDATE cost_center_name=VALUES(cost_center_name), active=VALUES(active);
 
 -- Users
-INSERT INTO users (email, password, role) VALUES
-  ('hr@nipponexpress.com','hr123','HR'),
-  ('employee@nipponexpress.com','employee123','EMPLOYEE'),
-  ('admin@nipponexpress.com','admin123','ADMIN')
-ON DUPLICATE KEY UPDATE password=VALUES(password), role=VALUES(role);
+INSERT INTO users (email, password, role, employee_code, full_name, designation, branch_id, sub_branch_id, department_id, reporting_officer_id) VALUES
+  ('hr@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+  ('employee@nipponexpress.com','employee123','EMPLOYEE','EMP000','Employee 00','Executive',1,2,1,1),
+  ('admin@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+ON DUPLICATE KEY UPDATE
+  password=VALUES(password),
+  role=VALUES(role),
+  employee_code=VALUES(employee_code),
+  full_name=VALUES(full_name),
+  designation=VALUES(designation),
+  branch_id=VALUES(branch_id),
+  sub_branch_id=VALUES(sub_branch_id),
+  department_id=VALUES(department_id),
+  reporting_officer_id=VALUES(reporting_officer_id);
 
 -- 20 per role (HR/EMPLOYEE/ADMIN)
-INSERT INTO users (email, password, role) VALUES
-  ('hr01@nipponexpress.com','hr123','HR'),('hr02@nipponexpress.com','hr123','HR'),('hr03@nipponexpress.com','hr123','HR'),('hr04@nipponexpress.com','hr123','HR'),('hr05@nipponexpress.com','hr123','HR'),
-  ('hr06@nipponexpress.com','hr123','HR'),('hr07@nipponexpress.com','hr123','HR'),('hr08@nipponexpress.com','hr123','HR'),('hr09@nipponexpress.com','hr123','HR'),('hr10@nipponexpress.com','hr123','HR'),
-  ('hr11@nipponexpress.com','hr123','HR'),('hr12@nipponexpress.com','hr123','HR'),('hr13@nipponexpress.com','hr123','HR'),('hr14@nipponexpress.com','hr123','HR'),('hr15@nipponexpress.com','hr123','HR'),
-  ('hr16@nipponexpress.com','hr123','HR'),('hr17@nipponexpress.com','hr123','HR'),('hr18@nipponexpress.com','hr123','HR'),('hr19@nipponexpress.com','hr123','HR'),('hr20@nipponexpress.com','hr123','HR'),
+INSERT INTO users (email, password, role, employee_code, full_name, designation, branch_id, sub_branch_id, department_id, reporting_officer_id) VALUES
+  ('hr01@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr02@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr03@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr04@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr05@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+  ('hr06@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr07@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr08@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr09@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr10@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+  ('hr11@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr12@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr13@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr14@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr15@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+  ('hr16@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr17@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr18@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr19@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('hr20@nipponexpress.com','hr123','HR',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 
-  ('employee01@nipponexpress.com','employee123','EMPLOYEE'),('employee02@nipponexpress.com','employee123','EMPLOYEE'),('employee03@nipponexpress.com','employee123','EMPLOYEE'),('employee04@nipponexpress.com','employee123','EMPLOYEE'),('employee05@nipponexpress.com','employee123','EMPLOYEE'),
-  ('employee06@nipponexpress.com','employee123','EMPLOYEE'),('employee07@nipponexpress.com','employee123','EMPLOYEE'),('employee08@nipponexpress.com','employee123','EMPLOYEE'),('employee09@nipponexpress.com','employee123','EMPLOYEE'),('employee10@nipponexpress.com','employee123','EMPLOYEE'),
-  ('employee11@nipponexpress.com','employee123','EMPLOYEE'),('employee12@nipponexpress.com','employee123','EMPLOYEE'),('employee13@nipponexpress.com','employee123','EMPLOYEE'),('employee14@nipponexpress.com','employee123','EMPLOYEE'),('employee15@nipponexpress.com','employee123','EMPLOYEE'),
-  ('employee16@nipponexpress.com','employee123','EMPLOYEE'),('employee17@nipponexpress.com','employee123','EMPLOYEE'),('employee18@nipponexpress.com','employee123','EMPLOYEE'),('employee19@nipponexpress.com','employee123','EMPLOYEE'),('employee20@nipponexpress.com','employee123','EMPLOYEE'),
+  ('employee01@nipponexpress.com','employee123','EMPLOYEE','EMP001','Employee 01','Executive',1,2,1,1),('employee02@nipponexpress.com','employee123','EMPLOYEE','EMP002','Employee 02','Associate',2,3,2,2),('employee03@nipponexpress.com','employee123','EMPLOYEE','EMP003','Employee 03','Executive',3,4,3,3),('employee04@nipponexpress.com','employee123','EMPLOYEE','EMP004','Employee 04','Associate',4,5,4,4),('employee05@nipponexpress.com','employee123','EMPLOYEE','EMP005','Employee 05','Executive',5,6,5,5),
+  ('employee06@nipponexpress.com','employee123','EMPLOYEE','EMP006','Employee 06','Associate',6,7,6,6),('employee07@nipponexpress.com','employee123','EMPLOYEE','EMP007','Employee 07','Executive',7,8,7,7),('employee08@nipponexpress.com','employee123','EMPLOYEE','EMP008','Employee 08','Associate',8,9,8,8),('employee09@nipponexpress.com','employee123','EMPLOYEE','EMP009','Employee 09','Executive',9,10,9,9),('employee10@nipponexpress.com','employee123','EMPLOYEE','EMP010','Employee 10','Associate',10,11,10,10),
+  ('employee11@nipponexpress.com','employee123','EMPLOYEE','EMP011','Employee 11','Executive',11,12,11,11),('employee12@nipponexpress.com','employee123','EMPLOYEE','EMP012','Employee 12','Associate',12,13,12,12),('employee13@nipponexpress.com','employee123','EMPLOYEE','EMP013','Employee 13','Executive',13,14,13,13),('employee14@nipponexpress.com','employee123','EMPLOYEE','EMP014','Employee 14','Associate',14,15,14,14),('employee15@nipponexpress.com','employee123','EMPLOYEE','EMP015','Employee 15','Executive',15,16,15,15),
+  ('employee16@nipponexpress.com','employee123','EMPLOYEE','EMP016','Employee 16','Associate',16,17,16,16),('employee17@nipponexpress.com','employee123','EMPLOYEE','EMP017','Employee 17','Executive',17,18,17,17),('employee18@nipponexpress.com','employee123','EMPLOYEE','EMP018','Employee 18','Associate',18,19,18,18),('employee19@nipponexpress.com','employee123','EMPLOYEE','EMP019','Employee 19','Executive',19,20,19,19),('employee20@nipponexpress.com','employee123','EMPLOYEE','EMP020','Employee 20','Associate',20,1,20,20),
 
-  ('admin01@nipponexpress.com','admin123','ADMIN'),('admin02@nipponexpress.com','admin123','ADMIN'),('admin03@nipponexpress.com','admin123','ADMIN'),('admin04@nipponexpress.com','admin123','ADMIN'),('admin05@nipponexpress.com','admin123','ADMIN'),
-  ('admin06@nipponexpress.com','admin123','ADMIN'),('admin07@nipponexpress.com','admin123','ADMIN'),('admin08@nipponexpress.com','admin123','ADMIN'),('admin09@nipponexpress.com','admin123','ADMIN'),('admin10@nipponexpress.com','admin123','ADMIN'),
-  ('admin11@nipponexpress.com','admin123','ADMIN'),('admin12@nipponexpress.com','admin123','ADMIN'),('admin13@nipponexpress.com','admin123','ADMIN'),('admin14@nipponexpress.com','admin123','ADMIN'),('admin15@nipponexpress.com','admin123','ADMIN'),
-  ('admin16@nipponexpress.com','admin123','ADMIN'),('admin17@nipponexpress.com','admin123','ADMIN'),('admin18@nipponexpress.com','admin123','ADMIN'),('admin19@nipponexpress.com','admin123','ADMIN'),('admin20@nipponexpress.com','admin123','ADMIN')
-ON DUPLICATE KEY UPDATE password=VALUES(password), role=VALUES(role);
+  ('admin01@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin02@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin03@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin04@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin05@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+  ('admin06@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin07@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin08@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin09@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin10@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+  ('admin11@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin12@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin13@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin14@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin15@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+  ('admin16@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin17@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin18@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin19@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admin20@nipponexpress.com','admin123','ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+ON DUPLICATE KEY UPDATE
+  password=VALUES(password),
+  role=VALUES(role),
+  employee_code=VALUES(employee_code),
+  full_name=VALUES(full_name),
+  designation=VALUES(designation),
+  branch_id=VALUES(branch_id),
+  sub_branch_id=VALUES(sub_branch_id),
+  department_id=VALUES(department_id),
+  reporting_officer_id=VALUES(reporting_officer_id);
 
 -- Application forms (EMP001..EMP020) with ALL Employee Information fields populated.
 -- NOTE: submitted_at is required (NOT NULL).

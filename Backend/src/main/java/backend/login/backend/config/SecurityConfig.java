@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .permissionsPolicy(policy -> policy.policy("geolocation=(), microphone=(), camera=()"))
             )
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/login", "/api/users/by-code/**").permitAll()
+                .requestMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

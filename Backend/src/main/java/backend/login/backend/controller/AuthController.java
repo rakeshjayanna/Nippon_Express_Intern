@@ -59,6 +59,11 @@ public class AuthController {
                 response.put("role", user.getRole());
                 response.put("employeeCode", user.getEmployeeCode());
                 response.put("fullName", user.getFullName());
+                response.put("designation", user.getDesignation());
+                response.put("branchId", user.getBranch() != null ? user.getBranch().getId() : null);
+                response.put("subBranchId", user.getSubBranch() != null ? user.getSubBranch().getId() : null);
+                response.put("departmentId", user.getDepartment() != null ? user.getDepartment().getId() : null);
+                response.put("reportingOfficerId", user.getReportingOfficer() != null ? user.getReportingOfficer().getId() : null);
                 
                 logger.info("Login successful for email: {}", request.getEmail());
                 return ResponseEntity.ok(response);
@@ -146,6 +151,10 @@ public class AuthController {
         map.put("employeeCode", user.getEmployeeCode());
         map.put("fullName", user.getFullName());
         map.put("designation", user.getDesignation());
+        map.put("branchId", user.getBranch() != null ? user.getBranch().getId() : null);
+        map.put("subBranchId", user.getSubBranch() != null ? user.getSubBranch().getId() : null);
+        map.put("departmentId", user.getDepartment() != null ? user.getDepartment().getId() : null);
+        map.put("reportingOfficerId", user.getReportingOfficer() != null ? user.getReportingOfficer().getId() : null);
         map.put("role", user.getRole());
         return map;
     }

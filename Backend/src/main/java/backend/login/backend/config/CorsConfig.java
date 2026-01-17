@@ -8,14 +8,13 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@SuppressWarnings("null")
 public class CorsConfig implements WebMvcConfigurer {
 
     @Value("${app.cors.allowed-origins:http://localhost:5173}")
     private String allowedOrigins;
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
+    public void addCorsMappings(@org.springframework.lang.NonNull CorsRegistry registry) {
         String[] origins = Arrays.stream(allowedOrigins.split(","))
             .map(String::trim)
             .filter(v -> !v.isEmpty())

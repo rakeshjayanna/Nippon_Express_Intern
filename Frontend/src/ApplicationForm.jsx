@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { authService } from './services/authService';
+import { API_BASE_URL } from './utils/constants';
 import './styles/applicationForm.css';
 
 // Keep these components at module scope so they don't get re-created each render.
@@ -228,6 +230,7 @@ function validateStep(stepIndex, formData) {
 }
 
 function ApplicationForm({ userEmail, userRole, onClose }) {
+    const currentUser = authService.getUserData();
     const [masterData, setMasterData] = useState({
         branches: [],
         departments: [],
@@ -260,22 +263,45 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
     const topRef = useRef(null);
     const isEmployeeCodeFocusedRef = useRef(false);
 
+
     useEffect(() => {
         fetchMasterData();
     }, []);
 
     useEffect(() => {
-        // When master data arrives after an employee lookup, remap IDs -> objects.
-        if (!employeeLookup) return;
+        const requestedByValue = (currentUser?.email || currentUser?.fullName || '').trim();
+        if (!requestedByValue) return;
         setFormData(prev => ({
             ...prev,
-            branch: employeeLookup.branchId ? masterData.branches.find(b => b.id === employeeLookup.branchId) : prev.branch,
-            subBranch: employeeLookup.subBranchId ? masterData.branches.find(b => b.id === employeeLookup.subBranchId) : prev.subBranch,
-            department: employeeLookup.departmentId ? masterData.departments.find(d => d.id === employeeLookup.departmentId) : prev.department,
-            reportingOfficer: employeeLookup.reportingOfficerId ? masterData.reportingOfficers.find(o => o.id === employeeLookup.reportingOfficerId) : prev.reportingOfficer
+            requestedBy: requestedByValue
         }));
+    }, [currentUser]);
+
+    useEffect(() => {
+        // When master data arrives after an employee lookup, remap IDs -> objects.
+        if (!employeeLookup) return;
+        if (!masterData.branches.length || !masterData.departments.length || !masterData.reportingOfficers.length) return;
+        
+        setFormData(prev => {
+            const newData = {
+                branch: employeeLookup.branchId ? masterData.branches.find(b => b.id === employeeLookup.branchId) : prev.branch,
+                subBranch: employeeLookup.subBranchId ? masterData.branches.find(b => b.id === employeeLookup.subBranchId) : prev.subBranch,
+                department: employeeLookup.departmentId ? masterData.departments.find(d => d.id === employeeLookup.departmentId) : prev.department,
+                reportingOfficer: employeeLookup.reportingOfficerId ? masterData.reportingOfficers.find(o => o.id === employeeLookup.reportingOfficerId) : prev.reportingOfficer
+            };
+            
+            // Only update if something actually changed
+            if (newData.branch === prev.branch && 
+                newData.subBranch === prev.subBranch && 
+                newData.department === prev.department && 
+                newData.reportingOfficer === prev.reportingOfficer) {
+                return prev;
+            }
+            
+            return { ...prev, ...newData };
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [masterData.branches, masterData.departments, masterData.reportingOfficers, employeeLookup]);
+    }, [employeeLookup]);
 
     // Auto-detect lookup while typing, but only when a complete code is present.
     // Critical: do NOT rewrite the employeeCode field while the input is focused,
@@ -354,7 +380,7 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
 
     const fetchMasterData = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/master-data/all', {
+            const response = await fetch(`${API_BASE_URL}/master-data/all`, {
                 headers: {
                     'X-User-Email': userEmail
                 }
@@ -411,7 +437,7 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/api/application-form/submit', {
+            const response = await fetch(`${API_BASE_URL}/application-form/submit`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -454,9 +480,29 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
         }
 
         if (empCode === lastLookupCodeRef.current) return;
+        const normalizeEmployeeId = (value) => {
+            const v = String(value || '').trim();
+            if (!v) return '';
+            if (/^\d{1,3}$/.test(v)) {
+                return `EMP${v.padStart(3, '0')}`;
+            }
+            const m = v.match(/^emp(\d{1,3})$/i);
+            if (m) {
+                return `EMP${m[1].padStart(3, '0')}`;
+            }
+            if (/^EMP\d{3}$/i.test(v)) {
+                return v.toUpperCase();
+            }
+            return '';
+        };
+
+        const normalized = normalizeEmployeeId(empCode);
+        if (!normalized) return;
+        empCode = normalized;
+
         try {
             setIsLookupLoading(true);
-            const res = await fetch(`http://localhost:8080/api/users/by-code/${encodeURIComponent(empCode)}`, {
+            const res = await fetch(`${API_BASE_URL}/users/by-code/${encodeURIComponent(empCode)}`, {
                 headers: { 'X-User-Email': userEmail }
             });
             if (res.ok) {
@@ -476,7 +522,7 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
                     scopeOfWork: pickStr(data.scopeOfWork, prev.scopeOfWork),
                     employeeType: pickStr(data.employeeType, prev.employeeType),
                     requestAction: pickStr(data.requestAction, prev.requestAction),
-                    requestedBy: pickStr(data.requestedBy, prev.requestedBy),
+                    requestedBy: (currentUser?.email || currentUser?.fullName || prev.requestedBy),
                     contactNo: pickStr(data.contactNo, prev.contactNo),
 
                     // Request toggles
@@ -583,6 +629,48 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
                     companyCode: data.companyCodeId ? masterData.companyCodes.find(c => c.id === data.companyCodeId) : prev.companyCode,
                     costCenter: data.costCenterId ? masterData.costCenters.find(c => c.id === data.costCenterId) : prev.costCenter
                 }));
+
+                // Enrich with latest submission data (if available)
+                if (userRole && String(userRole).toUpperCase() === 'HR') {
+                    const latestRes = await fetch(`${API_BASE_URL}/application-form/employee/${encodeURIComponent(empCode)}/latest`, {
+                        headers: { 'X-User-Email': userEmail }
+                    });
+                    if (latestRes.ok) {
+                        const latest = await latestRes.json();
+                        setEmployeeLookup(latest);
+
+                        setFormData(prev => ({
+                            ...prev,
+                            scopeOfWork: pickStr(latest.scopeOfWork, prev.scopeOfWork),
+                            employeeType: pickStr(latest.employeeType, prev.employeeType),
+                            requestAction: pickStr(latest.requestAction, prev.requestAction),
+                            contactNo: pickStr(latest.contactNo, prev.contactNo),
+
+                            // Request toggles
+                            requestEmailId: pickBool(latest.requestEmailId, prev.requestEmailId),
+                            requestDomainAccount: pickBool(latest.requestDomainAccount, prev.requestDomainAccount),
+                            requestBluetoothAccessCard: pickBool(latest.requestBluetoothAccessCard, prev.requestBluetoothAccessCard),
+                            requestSharedFolder: pickBool(latest.requestSharedFolder, prev.requestSharedFolder),
+                            requestInternetAccess: pickBool(latest.requestInternetAccess, prev.requestInternetAccess),
+                            requestNewins: pickBool(latest.requestNewins, prev.requestNewins),
+                            requestNexas: pickBool(latest.requestNexas, prev.requestNexas),
+                            requestGsnet: pickBool(latest.requestGsnet, prev.requestGsnet),
+                            requestVpnAccess: pickBool(latest.requestVpnAccess, prev.requestVpnAccess),
+                            requestHardDiskPenDrive: pickBool(latest.requestHardDiskPenDrive, prev.requestHardDiskPenDrive),
+                            requestNewGlow: pickBool(latest.requestNewGlow, prev.requestNewGlow),
+                            requestInternalApplication: pickBool(latest.requestInternalApplication, prev.requestInternalApplication),
+                            requestUsbAccess: pickBool(latest.requestUsbAccess, prev.requestUsbAccess),
+                            requestAnyOtherAsset: pickBool(latest.requestAnyOtherAsset, prev.requestAnyOtherAsset),
+
+                            branch: latest.branchId ? masterData.branches.find(b => b.id === latest.branchId) : prev.branch,
+                            subBranch: latest.subBranchId ? masterData.branches.find(b => b.id === latest.subBranchId) : prev.subBranch,
+                            department: latest.departmentId ? masterData.departments.find(d => d.id === latest.departmentId) : prev.department,
+                            reportingOfficer: latest.reportingOfficerId ? masterData.reportingOfficers.find(o => o.id === latest.reportingOfficerId) : prev.reportingOfficer,
+                            companyCode: latest.companyCodeId ? masterData.companyCodes.find(c => c.id === latest.companyCodeId) : prev.companyCode,
+                            costCenter: latest.costCenterId ? masterData.costCenters.find(c => c.id === latest.costCenterId) : prev.costCenter
+                        }));
+                    }
+                }
             } else if (res.status === 404) {
                 lastLookupCodeRef.current = empCode;
                 if (updateEmployeeCode) {
@@ -644,7 +732,7 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
         <div className="af-step">
             <Divider title="Employee Information" />
             <div className="af-grid">
-                <Field label="Employee Code" required error={stepErrors.employeeCode}>
+                <Field label="Employee ID" required error={stepErrors.employeeCode}>
                     <div className="af-inline">
                         <input
                             className="af-input"
@@ -674,11 +762,11 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
                     <input className="af-input" type="text" name="fullName" value={formData.fullName} onChange={handleChange} />
                 </Field>
 
-                <Field label="Branch" hint="Auto-filled from latest employee record">
+                <Field label="Branch">
                     <input className="af-input" type="text" value={formData.branch?.branchName || ''} placeholder="Auto-fetched" readOnly />
                 </Field>
 +
-                <Field label="Department" hint="Auto-filled from latest employee record">
+                <Field label="Department">
                     <input className="af-input" type="text" value={formData.department?.departmentName || ''} placeholder="Auto-fetched" readOnly />
                 </Field>
 
@@ -686,7 +774,7 @@ function ApplicationForm({ userEmail, userRole, onClose }) {
                     <input className="af-input" type="text" name="designation" value={formData.designation} onChange={handleChange} />
                 </Field>
 
-                <Field label="Reporting Officer" hint="Auto-filled from latest employee record">
+                <Field label="Reporting Officer">
                     <input className="af-input" type="text" value={formData.reportingOfficer?.officerName || ''} placeholder="Auto-fetched" readOnly />
                 </Field>
 

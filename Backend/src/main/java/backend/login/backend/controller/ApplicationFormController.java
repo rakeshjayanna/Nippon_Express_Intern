@@ -327,6 +327,10 @@ public class ApplicationFormController {
             payload.put("employeeCode", normalizedEmployeeCode);
             payload.put("fullName", target.getFullName());
             payload.put("designation", target.getDesignation());
+            payload.put("branchId", target.getBranch() != null ? target.getBranch().getId() : null);
+            payload.put("subBranchId", target.getSubBranch() != null ? target.getSubBranch().getId() : null);
+            payload.put("departmentId", target.getDepartment() != null ? target.getDepartment().getId() : null);
+            payload.put("reportingOfficerId", target.getReportingOfficer() != null ? target.getReportingOfficer().getId() : null);
             // leave other fields absent; frontend keeps existing values
             return ResponseEntity.ok(payload);
         } catch (Exception e) {

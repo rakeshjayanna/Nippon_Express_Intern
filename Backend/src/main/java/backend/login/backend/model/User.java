@@ -28,6 +28,22 @@ public class User {
     @Column(name = "designation")
     private String designation;
 
+    @ManyToOne
+    @JoinColumn(name = "branch_id")
+    private MasterBranch branch;
+
+    @ManyToOne
+    @JoinColumn(name = "sub_branch_id")
+    private MasterBranch subBranch;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private MasterDepartment department;
+
+    @ManyToOne
+    @JoinColumn(name = "reporting_officer_id")
+    private MasterReportingOfficer reportingOfficer;
+
     public int getId() {
         return id;
     }
@@ -82,5 +98,37 @@ public class User {
 
     public void setDesignation(String designation) {
         this.designation = designation;
+    }
+
+    public MasterBranch getBranch() {
+        return branch;
+    }
+
+    public void setBranch(MasterBranch branch) {
+        this.branch = branch;
+    }
+
+    public MasterBranch getSubBranch() {
+        return subBranch;
+    }
+
+    public void setSubBranch(MasterBranch subBranch) {
+        this.subBranch = subBranch;
+    }
+
+    public MasterDepartment getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(MasterDepartment department) {
+        this.department = department;
+    }
+
+    public MasterReportingOfficer getReportingOfficer() {
+        return reportingOfficer;
+    }
+
+    public void setReportingOfficer(MasterReportingOfficer reportingOfficer) {
+        this.reportingOfficer = reportingOfficer;
     }
 }
